@@ -8,7 +8,6 @@ using Server.Data;
 
 namespace CalorieBurningApp.Server.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("api/v1/entries")]
 [Produces("application/json")]
