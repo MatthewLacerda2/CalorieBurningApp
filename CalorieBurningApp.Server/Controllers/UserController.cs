@@ -166,7 +166,7 @@ public class UserController : ControllerBase{
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id) {
 
-        var user = _context.Users.FirstOrDefault();
+        var user = _context.Users.Find(id);
         if(user == null){
             return BadRequest("User does not Exist!");
         }

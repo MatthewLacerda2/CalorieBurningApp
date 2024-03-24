@@ -2,9 +2,10 @@ namespace CalorieBurningApp.Server.Models;
 
 public class ExerciseEntry {
 
-    public Guid Id { get; private set; }
-    public EExercise exercise { get; set; }
     public string userId { get; set; }
+    public Guid Id { get; private set; }
+
+    public EExercise exercise { get; set; }
     public DateTime dateTime { get; set; }
     public string title { get; set; }
     public int burnedCalories { get; set; }
