@@ -16,6 +16,12 @@ public class Streak {
     [JsonIgnore]
     public User user { get; set; }
 
+    public Streak(){
+        UserId = "";
+        count=0;
+        user=new User();
+    }
+
     public Streak(string _userId, User myUser) {
         UserId = _userId;
         user = myUser;

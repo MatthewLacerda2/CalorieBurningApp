@@ -18,6 +18,12 @@ public class User : IdentityUser {
 
     public int burnedCalories { get ; set; }
 
+    public User(){
+        FullName="";
+        createdDate=DateTime.Now;
+        lastLogin=createdDate;
+    }
+
     public User(string _fullName, DateOnly _birthday, string _userName, string _email, string _phoneNumber){
         FullName = _fullName;
         birthday = _birthday;

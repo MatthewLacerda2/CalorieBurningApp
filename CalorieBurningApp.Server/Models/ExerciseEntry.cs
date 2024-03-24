@@ -26,6 +26,12 @@ public class ExerciseEntry {
     [Range(1,2000)]
     public int burnedCalories { get; set; }
 
+    public ExerciseEntry(){
+        userId="";
+        user=new User();
+        title="";
+    }
+
     public ExerciseEntry(EExercise _exercise, string _userId, User myUser, DateTime _dateTime, string _title, int _burnedCalories){
         Id = Guid.NewGuid();        
         exercise = _exercise;
