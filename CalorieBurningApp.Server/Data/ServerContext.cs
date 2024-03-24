@@ -7,7 +7,7 @@ public class ServerContext : DbContext {
 
     public DbSet<ExerciseEntry> ExerciseEntries { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<ConsecutiveDays> UserConsecutiveDays { get; set; }
+    public DbSet<Streak> UserConsecutiveDays { get; set; }
 
     public ServerContext (DbContextOptions<ServerContext> options)
         : base(options) {
@@ -23,7 +23,7 @@ public class ServerContext : DbContext {
         modelBuilder.Entity<User>()
             .HasKey(u => u.Id);
 
-        modelBuilder.Entity<ConsecutiveDays>()
+        modelBuilder.Entity<Streak>()
             .HasKey(ucd => ucd.UserId);
 
         // Define foreign key relationships
@@ -32,7 +32,7 @@ public class ServerContext : DbContext {
             .WithMany()
             .HasForeignKey(e => e.userId);
 
-        modelBuilder.Entity<ConsecutiveDays>()
+        modelBuilder.Entity<Streak>()
             .HasOne(ucd => ucd.UserId)
             .WithMany()
             .HasForeignKey(ucd => ucd.UserId);
