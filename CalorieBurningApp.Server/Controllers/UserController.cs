@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Server.Data;
 
-namespace CalorieBurningApp.Server.Data;
+namespace CalorieBurningApp.Server.Controllers;
 
 [Authorize]
 [ApiController]
@@ -22,7 +22,6 @@ public class UserController : ControllerBase{
         _userManager = userManager;
     }
 
-    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [HttpGet("{id}")]
@@ -38,7 +37,7 @@ public class UserController : ControllerBase{
         return Ok(response);
     }
 
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDTO[]>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [HttpGet]
     public async Task<IActionResult> ReadUsers(string? username, string? fullname, int? offset, int limit, string? sort) {
@@ -136,6 +135,10 @@ public class UserController : ControllerBase{
             return StatusCode(500, "Internal Server Error: Register User Unsuccessful");
         }
 
+        Streak streak = new Streak(user.Id);
+        _context.Streaks.Add(streak);
+        _context.SaveChanges();
+
         return CreatedAtAction(nameof(CreateUser), (UserDTO)user);
     }
 
@@ -163,14 +166,20 @@ public class UserController : ControllerBase{
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id) {
 
-        var user = _context.Users.Find(id);
+        var user = _context.Users.FirstOrDefault();
         if(user == null){
             return BadRequest("User does not Exist!");
         }
-        
+
+        var streaksToDelete = await _context.Streaks.Where(s => s.UserId == id).ToArrayAsync();
+        _context.Streaks.RemoveRange(streaksToDelete);
+
+        var entriesToDelete = await _context.ExerciseEntries.Where( e => e.userId == id).ToArrayAsync();
+        _context.ExerciseEntries.RemoveRange(entriesToDelete);
+
         _context.Users.Remove(user);
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();        
 
         return NoContent();
     }

@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using CalorieBurningApp.Server.Models;
 
 namespace Server.Data;
