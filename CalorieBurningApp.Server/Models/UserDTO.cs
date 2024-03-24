@@ -21,4 +21,12 @@ public class UserDTO{
         Email = user.Email!;
         PhoneNumber = user.PhoneNumber!;
     }
+
+    public static explicit operator User(UserDTO userDTO){
+        return new User(userDTO.FullName, userDTO.birthday, userDTO.heightInCm, userDTO.UserName, userDTO.Email, userDTO.PhoneNumber);
+    }
+
+    public static explicit operator UserDTO(User user){
+        return new UserDTO(user);
+    }
 }
