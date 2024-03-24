@@ -9,14 +9,8 @@ public class User : IdentityUser {
     public DateOnly birthday { get; set; }
     public int heightInCm { get ; set; }
 
-    public User(UserDTO userDTO){
-        FullName = userDTO.FullName;
-        birthday = userDTO.birthday;
-        heightInCm = userDTO.heightInCm;
-        UserName = userDTO.UserName;
-        Email = userDTO.Email;
-        PhoneNumber = userDTO.PhoneNumber;
-    }
+    public DateTime createdDate { get ; set; }
+    public DateTime lastLogin { get ; set; }
 
     public User(string _fullName, DateOnly _birthday, int _heightInCm, string _userName, string _email, string _phoneNumber){
         FullName = _fullName;
@@ -26,5 +20,8 @@ public class User : IdentityUser {
         UserName = _userName;
         Email = _email;
         PhoneNumber = _phoneNumber;
+
+        createdDate = DateTime.Now;
+        lastLogin = DateTime.Now;
     }
 }

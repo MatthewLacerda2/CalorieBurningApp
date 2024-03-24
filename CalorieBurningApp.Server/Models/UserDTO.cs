@@ -12,6 +12,9 @@ public class UserDTO{
     public string Email { get ; set; }
     public string PhoneNumber { get ; set; }
 
+    public DateTime createdDate { get ; set; }
+    public DateTime lastLogin { get ; set; }
+
     public UserDTO( User user ) {
         FullName = user.FullName;
         birthday = user.birthday;
@@ -20,6 +23,8 @@ public class UserDTO{
         UserName = user.UserName!;
         Email = user.Email!;
         PhoneNumber = user.PhoneNumber!;
+        createdDate = user.createdDate;
+        lastLogin = user.lastLogin;
     }
 
     public static explicit operator User(UserDTO userDTO){

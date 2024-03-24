@@ -127,7 +127,7 @@ public class UserController : ControllerBase{
             
         }
 
-        User user = new User(newUser);
+        User user = new User(newUser.FullName, newUser.birthday, newUser.heightInCm, newUser.UserName, newUser.Email, newUser.PhoneNumber);
 
         var result = await _userManager.CreateAsync(user, password);
 
@@ -137,7 +137,7 @@ public class UserController : ControllerBase{
 
         Streak streak = new Streak(user.Id);
         _context.Streaks.Add(streak);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(CreateUser), (UserDTO)user);
     }
