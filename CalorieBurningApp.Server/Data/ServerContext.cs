@@ -23,17 +23,17 @@ public class ServerContext : DbContext {
             .HasKey(u => u.Id);
 
         modelBuilder.Entity<Streak>()
-            .HasKey(ucd => ucd.UserId);
+            .HasKey(s => s.UserId); // Corrected the lambda parameter name
 
-        // Define foreign key relationships
+        // Define foreign key relationships using navigation properties
         modelBuilder.Entity<ExerciseEntry>()
-            .HasOne(e => e.userId)
-            .WithMany()
-            .HasForeignKey(e => e.userId);
+            .HasOne(e => e.user)  // Assuming there's a navigation property named "User" in ExerciseEntry
+            .WithMany()  // Assuming ExerciseEntry does not have a direct navigation property to Streak
+            .HasForeignKey(e => e.userId); // Use the UserId property as the foreign key
 
         modelBuilder.Entity<Streak>()
-            .HasOne(ucd => ucd.UserId)
-            .WithMany()
-            .HasForeignKey(ucd => ucd.UserId);
+            .HasOne(s => s.user) // Assuming there's a navigation property named "User" in Streak
+            .WithMany()  // Assuming Streak does not have a direct navigation property to ExerciseEntry
+            .HasForeignKey(s => s.UserId); // Use the UserId property as the foreign key
     }
 }
