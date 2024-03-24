@@ -13,7 +13,7 @@ public class Streak {
         count++;
     }
 
-    public void Lose(){
+    public void Lose(){ //Tough luck
         count = 0;
     }
 }
