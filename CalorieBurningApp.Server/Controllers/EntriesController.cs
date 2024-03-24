@@ -22,6 +22,12 @@ public class EntriesController : ControllerBase{
         _userManager = userManager;
     }
 
+    /// <summary>
+    /// Find an Entry by a given Id
+    /// </summary>
+    /// <returns>Exercise Entry</returns>
+    /// <response code="200">Exercise Entry object</response>
+    /// <response code="404">Not Found response if there was no Entry with the given Id found</response>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseEntry>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [HttpGet("{id}")]
