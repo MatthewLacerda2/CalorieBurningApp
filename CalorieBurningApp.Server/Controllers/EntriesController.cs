@@ -41,7 +41,7 @@ public class EntriesController : ControllerBase{
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [HttpGet]
     public async Task<IActionResult> ReadEntries(EExercise[]? exercises, DateTime? datetimeMin, DateTime? datetimeMax,
-                                                string? title, int? burnedCaloriesMin, int? burnedCaloriesMax,
+                                                string? userId, string? title, int? burnedCaloriesMin, int? burnedCaloriesMax,
                                                 int? offset, int limit, string? sort) {
 
         if (limit < 1) {
@@ -66,6 +66,10 @@ public class EntriesController : ControllerBase{
 
         if (datetimeMax.HasValue) {
             EntriesQuery = EntriesQuery.Where(e => e.dateTime <= datetimeMax);
+        }
+
+        if(!string.IsNullOrEmpty(userId)){
+            EntriesQuery = EntriesQuery.OrderBy( e=>e.userId == userId);
         }
 
         if(!string.IsNullOrEmpty(title)){
