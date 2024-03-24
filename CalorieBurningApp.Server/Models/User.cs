@@ -9,6 +9,15 @@ public class User : IdentityUser {
     public DateOnly birthday { get; set; }
     public int heightInCm { get ; set; }
 
+    public User(UserDTO userDTO){
+        FullName = userDTO.FullName;
+        birthday = userDTO.birthday;
+        heightInCm = userDTO.heightInCm;
+        UserName = userDTO.UserName;
+        Email = userDTO.Email;
+        PhoneNumber = userDTO.PhoneNumber;
+    }
+
     public User(string _fullName, DateOnly _birthday, int _heightInCm, string _userName, string _email, string _phoneNumber){
         FullName = _fullName;
         birthday = _birthday;
