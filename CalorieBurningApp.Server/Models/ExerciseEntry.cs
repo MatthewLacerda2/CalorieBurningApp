@@ -23,7 +23,7 @@ public class ExerciseEntry {
     public string title { get; set; }
 
     [Required]
-    [Range(0,100)]
+    [Range(1,2000)]
     public int burnedCalories { get; set; }
 
     public ExerciseEntry(EExercise _exercise, string _userId, User myUser, DateTime _dateTime, string _title, int _burnedCalories){
