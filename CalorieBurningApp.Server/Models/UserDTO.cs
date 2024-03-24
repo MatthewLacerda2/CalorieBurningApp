@@ -1,18 +1,35 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace CalorieBurningApp.Server.Models;
 
 public class UserDTO{
 
+    [StringLength(50)]
     public string FullName { get; set; }
 
     public DateOnly birthday { get; set; }
+
+    [Range(128, 255)]
     public int heightInCm { get ; set; }
 
+    [Required]
+    [StringLength(50)]
     public string UserName { get ; set; }
+
+    [Required]
     public string Id { get ; set; }
+
+    [Required]
     public string Email { get ; set; }
+
+    [Required]
+    [StringLength(15)]
     public string PhoneNumber { get ; set; }
 
+    [Required]
     public DateTime createdDate { get ; set; }
+
+    [Required]
     public DateTime lastLogin { get ; set; }
 
     public UserDTO( User user ) {
