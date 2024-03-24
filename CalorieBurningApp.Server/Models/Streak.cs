@@ -1,17 +1,24 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CalorieBurningApp.Server.Models;
 
 public class Streak {
 
+    [Key]
+    [ForeignKey("user")]
     public string UserId { get; private set; }
 
     [Required]
     public int count { get; private set; }
 
-    public Streak(string _userId) {
+    [JsonIgnore]
+    public User user { get; set; }
+
+    public Streak(string _userId, User myUser) {
         UserId = _userId;
+        user = myUser;
     }
 
     public void Increment(){

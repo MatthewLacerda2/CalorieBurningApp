@@ -135,7 +135,7 @@ public class UserController : ControllerBase{
             return StatusCode(500, "Internal Server Error: Register User Unsuccessful");
         }
 
-        Streak streak = new Streak(user.Id);
+        Streak streak = new Streak(user.Id, user);
         _context.Streaks.Add(streak);
         await _context.SaveChangesAsync();
 
