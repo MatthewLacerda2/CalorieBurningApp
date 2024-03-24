@@ -13,9 +13,17 @@ public class ServerContext : DbContext {
 
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+
+        base.OnConfiguring(optionsBuilder);
+
+        optionsBuilder.UseMySql(
+            "Server=localhost;Port=3306;Database=sqlcalories;User=lendacerda;Password=xpvista7810;",
+            new MariaDbServerVersion(new Version(10, 5, 11)));
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
-        // Configure primary keys
         modelBuilder.Entity<ExerciseEntry>()
             .HasKey(e => e.Id);
 
@@ -23,17 +31,17 @@ public class ServerContext : DbContext {
             .HasKey(u => u.Id);
 
         modelBuilder.Entity<Streak>()
-            .HasKey(s => s.UserId); // Corrected the lambda parameter name
+            .HasKey(s => s.UserId);
 
         // Define foreign key relationships using navigation properties
         modelBuilder.Entity<ExerciseEntry>()
-            .HasOne(e => e.user)  // Assuming there's a navigation property named "User" in ExerciseEntry
+            .HasOne(e => e.user)
             .WithMany()  // Assuming ExerciseEntry does not have a direct navigation property to Streak
-            .HasForeignKey(e => e.userId); // Use the UserId property as the foreign key
+            .HasForeignKey(e => e.userId);
 
         modelBuilder.Entity<Streak>()
             .HasOne(s => s.user) // Assuming there's a navigation property named "User" in Streak
             .WithMany()  // Assuming Streak does not have a direct navigation property to ExerciseEntry
-            .HasForeignKey(s => s.UserId); // Use the UserId property as the foreign key
+            .HasForeignKey(s => s.UserId);
     }
 }
