@@ -6,7 +6,7 @@ public class ServerContext : DbContext {
 
     public DbSet<ExerciseEntry> ExerciseEntries { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<Streak> UserConsecutiveDays { get; set; }
+    public DbSet<Streak> Streaks { get; set; }
 
     public ServerContext (DbContextOptions<ServerContext> options)
         : base(options) {
