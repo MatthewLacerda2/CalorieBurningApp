@@ -150,7 +150,17 @@ public class EntriesController : ControllerBase{
             return BadRequest("Calories must be a natural number greater than 0");
         }
         
+        newEntry.user.burnedCalories += newEntry.burnedCalories;
+
         _context.ExerciseEntries.Add(newEntry);
+
+        ExerciseEntry lastEntry = _context.ExerciseEntries.Where(e=>e.userId == newEntry.userId).OrderByDescending(e=>e.dateTime).FirstOrDefault()!;
+        DateTime yesterdayDate = DateTime.Now.AddDays(-1).Date;
+        bool wasPostedYesterday = lastEntry!.dateTime.Date == yesterdayDate;
+        if(wasPostedYesterday){
+            _context.Streaks.Where(s=>s.UserId == newEntry.userId).FirstOrDefault()!.Increment();
+        }
+
         await _context.SaveChangesAsync();
 
         var response = JsonConvert.SerializeObject(newEntry);
@@ -161,7 +171,7 @@ public class EntriesController : ControllerBase{
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExerciseEntry))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [HttpPatch]
-    public async Task<IActionResult> UpdateStreak([FromBody] ExerciseEntry upEntry) {
+    public async Task<IActionResult> UpdateEntry([FromBody] ExerciseEntry upEntry) {
 
         var entryExists = _context.ExerciseEntries.Find(upEntry.Id);
         if (entryExists==null) {
@@ -176,6 +186,10 @@ public class EntriesController : ControllerBase{
             return BadRequest("Calories must be a natural number greater than 0");
         }
 
+        int caloryUpdate = upEntry.burnedCalories - entryExists.burnedCalories;
+        upEntry.user.burnedCalories += caloryUpdate;
+
+        entryExists = upEntry;
         await _context.SaveChangesAsync();
 
         var response = JsonConvert.SerializeObject(entryExists);
@@ -192,6 +206,8 @@ public class EntriesController : ControllerBase{
         if(entry == null){
             return BadRequest("Entry does not Exist!");
         }
+
+        entry.user.burnedCalories -= entry.burnedCalories;
 
         _context.ExerciseEntries.Remove(entry);
 

@@ -127,7 +127,7 @@ public class UserController : ControllerBase{
             
         }
 
-        User user = new User(newUser.FullName, newUser.birthday, newUser.heightInCm, newUser.UserName, newUser.Email, newUser.PhoneNumber);
+        User user = new User(newUser.FullName, newUser.birthday, newUser.UserName, newUser.Email, newUser.PhoneNumber);
 
         var result = await _userManager.CreateAsync(user, password);
 

@@ -84,25 +84,6 @@ public class StreakController : ControllerBase{
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Streak))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
-    [HttpPatch("{userId}")]
-    public async Task<IActionResult> IncrementStreak(string userId) {
-
-        var streak = await _context.Streaks.FirstOrDefaultAsync(s => s.UserId == userId);
-        if(streak==null){
-            return NotFound();
-        }
-
-        streak.Increment();
-
-        await _context.SaveChangesAsync();
-
-        var response = JsonConvert.SerializeObject(streak);
-
-        return Ok(response);
-    }
-
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Streak))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [HttpPatch]
     public async Task<IActionResult> LoseStreak(string userId) {
 
