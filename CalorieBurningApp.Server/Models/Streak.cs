@@ -7,24 +7,24 @@ namespace CalorieBurningApp.Server.Models;
 public class Streak {
 
     [Key]
-    [ForeignKey("user")]
+    [ForeignKey("User")]
     public string UserId { get; set; }
 
     [Required]
-    public int count { get; private set; }
+    public int count { get; set; }
 
     [JsonIgnore]
-    public User user { get; set; }
+    public User User { get; set; }
 
     public Streak(){
         UserId = "";
         count=0;
-        user=new User();
+        User=new User();
     }
 
-    public Streak(string _userId, User myUser) {
-        UserId = _userId;
-        user = myUser;
+    public Streak(string userId, User user) {
+        UserId = userId;
+        User = user;
     }
 
     public void Increment(){

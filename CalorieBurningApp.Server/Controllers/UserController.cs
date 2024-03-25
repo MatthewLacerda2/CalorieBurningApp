@@ -138,7 +138,7 @@ public class UserController : ControllerBase{
         }
 
         _context.Streaks.Find(streak)!.UserId = user.Id;
-        _context.Streaks.Find(streak)!.user = user;
+        _context.Streaks.Find(streak)!.User = user;
 
         await _context.SaveChangesAsync();
 

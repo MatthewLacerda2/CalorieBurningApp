@@ -19,7 +19,6 @@ public class User : IdentityUser {
     [Required]
     public int burnedCalories { get ; set; }
 
-    [Required]
     public Streak Streak { get; set; }
 
     public User(){
