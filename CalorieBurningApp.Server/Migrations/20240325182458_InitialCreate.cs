@@ -86,7 +86,8 @@ namespace CalorieBurningApp.Server.Migrations
                 {
                     UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    count = table.Column<int>(type: "int", nullable: false)
+                    count = table.Column<int>(type: "int", nullable: false),
+                    record = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

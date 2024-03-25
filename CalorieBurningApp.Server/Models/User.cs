@@ -19,14 +19,12 @@ public class User : IdentityUser {
     [Required]
     public int burnedCalories { get ; set; }
 
-    public Streak Streak { get; set; }
-
     public User(){
-        FullName="";
+        FullName=string.Empty;
+        
         createdDate=DateTime.Now;
         lastLogin=createdDate;
-
-        Streak = null!;
+        birthday=DateOnly.MinValue;
     }
 
     public User(string _fullName, DateOnly _birthday, string _userName, string _email, string _phoneNumber){
@@ -39,7 +37,5 @@ public class User : IdentityUser {
 
         createdDate = DateTime.Now;
         lastLogin = DateTime.Now;
-
-        Streak = null!;
     }
 }

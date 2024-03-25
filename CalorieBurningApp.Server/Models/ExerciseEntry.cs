@@ -1,19 +1,16 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace CalorieBurningApp.Server.Models;
 
 public class ExerciseEntry {
 
-    [ForeignKey("user")]
-    public string userId { get; set; }
-
-    [JsonIgnore]
-    public User user { get; set; }
-
     [Key]
     public Guid Id { get; private set; }
+
+    [ForeignKey("user")]
+    public string userId { get; set; }
 
     [Required]
     public EExercise exercise { get; set; }
@@ -28,15 +25,13 @@ public class ExerciseEntry {
 
     public ExerciseEntry(){
         userId="";
-        user=new User();
         title="";
     }
 
-    public ExerciseEntry(EExercise _exercise, string _userId, User myUser, DateTime _dateTime, string _title, int _burnedCalories){
-        Id = Guid.NewGuid();        
-        exercise = _exercise;
+    public ExerciseEntry(string _userId, EExercise _exercise, DateTime _dateTime, string _title, int _burnedCalories){
+        Id = Guid.NewGuid();
         userId = _userId;
-        user = myUser;
+        exercise = _exercise;
         dateTime = _dateTime;
         title = _title;
         burnedCalories = _burnedCalories;

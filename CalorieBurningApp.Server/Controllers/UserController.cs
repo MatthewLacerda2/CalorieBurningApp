@@ -111,20 +111,25 @@ public class UserController : ControllerBase{
             return BadRequest("PhoneNumber already registered!");
         }
 
-        Streak streak = new Streak();
-        _context.Streaks.Add(streak);
-        await _context.SaveChangesAsync();
+        if(!StringChecker.IsPasswordStrong(password)){
+            return BadRequest("Password must have an Upper-Case, a Lower-Case, a number and a special character");
+        }
+
+        newUser.createdDate = DateTime.Now;
+        newUser.lastLogin = DateTime.Now;
+        newUser.burnedCalories = 0;
 
         User user = new User(newUser.FullName, newUser.birthday, newUser.UserName, newUser.Email, newUser.PhoneNumber);
         var result = await _userManager.CreateAsync(user, password);
 
-        if (!result.Succeeded){
-            return StatusCode(500, "Internal Server Error: Register User Unsuccessful");
-        }
-
-        streak.UserId = user.Id;
+        Streak streak = new Streak(user.Id);
+        _context.Streaks.Add(streak);
 
         await _context.SaveChangesAsync();
+
+        if (!result.Succeeded){
+            return StatusCode(500, "Internal Server Error: Registrar Usuario Unsuccessful\n\n" + result.Errors);
+        }
 
         return CreatedAtAction(nameof(CreateUser), (UserDTO)user);
     }
@@ -138,6 +143,9 @@ public class UserController : ControllerBase{
         if (existingUser==null) {
             return BadRequest("User does not Exist!");
         }
+
+        upUser.createdDate = existingUser.createdDate;
+        upUser.burnedCalories = existingUser.burnedCalories;
 
         existingUser = (User)upUser;
 
@@ -158,8 +166,9 @@ public class UserController : ControllerBase{
             return BadRequest("User does not Exist!");
         }
 
-        var streaksToDelete = await _context.Streaks.Where(s => s.UserId == id).ToArrayAsync();
-        _context.Streaks.RemoveRange(streaksToDelete);
+        var streak = _context.Streaks.FirstOrDefault(e => e.UserId == id);
+        _context.Streaks.Remove(streak!);
+        _context.SaveChanges();
 
         var entriesToDelete = await _context.ExerciseEntries.Where( e => e.userId == id).ToArrayAsync();
         _context.ExerciseEntries.RemoveRange(entriesToDelete);

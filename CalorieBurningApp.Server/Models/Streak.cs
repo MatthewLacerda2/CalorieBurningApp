@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace CalorieBurningApp.Server.Models;
 
@@ -13,22 +13,23 @@ public class Streak {
     [Required]
     public int count { get; set; }
 
-    [JsonIgnore]
-    public User User { get; set; }
+    [Required]
+    public int record { get; private set; }
 
     public Streak(){
         UserId = "";
-        count=0;
-        User=null!;
     }
 
-    public Streak(string userId, User user) {
+    public Streak(string userId) {
         UserId = userId;
-        User = user;
     }
 
     public void Increment(){
         count++;
+
+        if(record > count){
+            record = count;
+        }
     }
 
     public void Lose(){ //Tough luck

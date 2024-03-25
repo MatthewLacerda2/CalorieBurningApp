@@ -21,21 +21,6 @@ public class LeaderboardController : ControllerBase{
         _userManager = userManager;
     }
 
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseEntry>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
-    [HttpGet("{id}")]
-    public async Task<IActionResult> ReadByUserId(string userId) {
-
-        var user = await _context.Users.FindAsync(userId);
-        if(user==null){
-            return NotFound();
-        }
-
-        var response = JsonConvert.SerializeObject((UserDTO)user);
-
-        return Ok(response);
-    }
-
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDTO[]>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [HttpGet]

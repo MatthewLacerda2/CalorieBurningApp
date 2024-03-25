@@ -37,7 +37,7 @@ public class StreakController : ControllerBase{
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Streak[]>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [HttpGet]
-    public async Task<IActionResult> ReadUsers(int? min, int? max, int? offset, int limit) {
+    public async Task<IActionResult> ReadStreaks(int? minCount, int? maxCount, int? offset, int limit) {
 
         if (limit < 1) {
             return BadRequest("Limit parameter must be a natural number greater than 0");
@@ -45,18 +45,18 @@ public class StreakController : ControllerBase{
 
         var StreaksQuery = _context.Streaks.AsQueryable();
 
-        if(min.HasValue){
+        if(minCount.HasValue){
 
-            if(min < 0){
+            if(minCount < 0){
                 return BadRequest("Minimum must be a natural equal or greater than 0");
             }
 
-            StreaksQuery = StreaksQuery.Where( s => s.count >= min);
+            StreaksQuery = StreaksQuery.Where( s => s.count >= minCount);
 
         }
 
-        if(max.HasValue){
-            StreaksQuery = StreaksQuery.Where( s => s.count < max);
+        if(maxCount.HasValue){
+            StreaksQuery = StreaksQuery.Where( s => s.count < maxCount);
         }
 
         if(offset.HasValue){

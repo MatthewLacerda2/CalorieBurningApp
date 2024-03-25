@@ -21,20 +21,30 @@ public class ServerContext : DbContext {
             "Server=localhost;Port=3306;Database=sqlcalories;User=lendacerda;Password=xpvista7810;",
             new MariaDbServerVersion(new Version(10, 5, 11)));
     }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        
-        base.OnModelCreating(modelBuilder);
 
-        // Configure primary keys
-        modelBuilder.Entity<ExerciseEntry>().HasKey(e => e.Id);
-        modelBuilder.Entity<User>().HasKey(u => u.Id);
-        modelBuilder.Entity<Streak>().HasKey(s => s.UserId);
-
-        // Configure one-to-one relationship: User -> Streak
+        // Configure User entity
         modelBuilder.Entity<User>()
-            .HasOne(u => u.Streak)
-            .WithOne(s => s.User)
+            .HasKey(u => u.Id);
+
+        // Configure Streak entity
+        modelBuilder.Entity<Streak>()
+            .HasKey(s => s.UserId);
+
+        // Configure ExerciseEntry entity
+        modelBuilder.Entity<ExerciseEntry>()
+            .HasKey(e => e.Id);
+
+        // Define relationships
+        modelBuilder.Entity<ExerciseEntry>()
+            .HasOne<User>()
+            .WithMany()
+            .HasForeignKey(e => e.userId);
+
+        modelBuilder.Entity<Streak>()
+            .HasOne<User>()
+            .WithOne()
             .HasForeignKey<Streak>(s => s.UserId);
     }
 }

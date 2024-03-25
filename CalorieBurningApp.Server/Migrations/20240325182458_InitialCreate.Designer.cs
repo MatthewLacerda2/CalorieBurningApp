@@ -12,7 +12,7 @@ using Server.Data;
 namespace CalorieBurningApp.Server.Migrations
 {
     [DbContext(typeof(ServerContext))]
-    [Migration("20240325143747_InitialCreate")]
+    [Migration("20240325182458_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -62,6 +62,9 @@ namespace CalorieBurningApp.Server.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<int>("count")
+                        .HasColumnType("int");
+
+                    b.Property<int>("record")
                         .HasColumnType("int");
 
                     b.HasKey("UserId");
@@ -140,29 +143,19 @@ namespace CalorieBurningApp.Server.Migrations
 
             modelBuilder.Entity("CalorieBurningApp.Server.Models.ExerciseEntry", b =>
                 {
-                    b.HasOne("CalorieBurningApp.Server.Models.User", "user")
+                    b.HasOne("CalorieBurningApp.Server.Models.User", null)
                         .WithMany()
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("CalorieBurningApp.Server.Models.Streak", b =>
                 {
-                    b.HasOne("CalorieBurningApp.Server.Models.User", "User")
-                        .WithOne("Streak")
+                    b.HasOne("CalorieBurningApp.Server.Models.User", null)
+                        .WithOne()
                         .HasForeignKey("CalorieBurningApp.Server.Models.Streak", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("CalorieBurningApp.Server.Models.User", b =>
-                {
-                    b.Navigation("Streak")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
