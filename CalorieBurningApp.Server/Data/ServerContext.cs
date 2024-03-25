@@ -24,19 +24,17 @@ public class ServerContext : DbContext {
     
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
-        // Configure User entity
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<User>()
             .HasKey(u => u.Id);
 
-        // Configure Streak entity
         modelBuilder.Entity<Streak>()
             .HasKey(s => s.UserId);
 
-        // Configure ExerciseEntry entity
         modelBuilder.Entity<ExerciseEntry>()
             .HasKey(e => e.Id);
 
-        // Define relationships
         modelBuilder.Entity<ExerciseEntry>()
             .HasOne<User>()
             .WithMany()
@@ -46,5 +44,9 @@ public class ServerContext : DbContext {
             .HasOne<User>()
             .WithOne()
             .HasForeignKey<Streak>(s => s.UserId);
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.Id)
+            .ValueGeneratedNever();
     }
 }

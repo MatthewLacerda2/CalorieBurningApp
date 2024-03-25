@@ -144,38 +144,38 @@ public class UserController : ControllerBase{
             return BadRequest("User does not Exist!");
         }
 
-        upUser.createdDate = existingUser.createdDate;
-        upUser.burnedCalories = existingUser.burnedCalories;
-
-        existingUser = (User)upUser;
+        existingUser.FullName = upUser.FullName;
+        existingUser.FullName = upUser.UserName;
+        existingUser.FullName = upUser.Email;
+        existingUser.FullName = upUser.PhoneNumber;
 
         await _context.SaveChangesAsync();
 
-        var response = JsonConvert.SerializeObject((UserDTO)existingUser);
+        var response = JsonConvert.SerializeObject(upUser);
 
         return Ok(response);
     }
 
-    [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(NoContentResult))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id) {
 
-        var user = _context.Users.Find(id);
+        var user = await _context.Users.FindAsync(id);
         if(user == null){
             return BadRequest("User does not Exist!");
         }
 
-        var streak = _context.Streaks.FirstOrDefault(e => e.UserId == id);
+        var streak = await _context.Streaks.FirstOrDefaultAsync(e => e.UserId == id);
         _context.Streaks.Remove(streak!);
-        _context.SaveChanges();
 
-        var entriesToDelete = await _context.ExerciseEntries.Where( e => e.userId == id).ToArrayAsync();
-        _context.ExerciseEntries.RemoveRange(entriesToDelete);
+        var entriesToDelete = _context.ExerciseEntries.Where(e => e.userId == id).ToArray();
+        if (entriesToDelete.Length > 0) {
+            _context.ExerciseEntries.RemoveRange(entriesToDelete);
+        }
 
         _context.Users.Remove(user);
-
-        await _context.SaveChangesAsync();        
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }
