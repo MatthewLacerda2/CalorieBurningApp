@@ -29,7 +29,11 @@ public class UserDTO{
     [Required]
     public DateTime lastLogin { get ; set; }
 
+    [Required]
     public int burnedCalories { get ; set; }
+
+    [Required]
+    public Streak Streak { get; set; }
 
     public UserDTO( User user ) {
         FullName = user.FullName;
@@ -41,10 +45,11 @@ public class UserDTO{
         createdDate = user.createdDate;
         lastLogin = user.lastLogin;
         burnedCalories = user.burnedCalories;
+        Streak = user.Streak;
     }
 
     public static explicit operator User(UserDTO userDTO){
-        return new User(userDTO.FullName, userDTO.birthday, userDTO.UserName, userDTO.Email, userDTO.PhoneNumber);
+        return new User(userDTO.FullName, userDTO.birthday, userDTO.UserName, userDTO.Email, userDTO.PhoneNumber, userDTO.Streak);
     }
 
     public static explicit operator UserDTO(User user){

@@ -126,7 +126,10 @@ public class UserController : ControllerBase{
             
         }
 
-        User user = new User(newUser.FullName, newUser.birthday, newUser.UserName, newUser.Email, newUser.PhoneNumber);
+        Streak streak = new Streak();
+        _context.Streaks.Add(streak);
+
+        User user = new User(newUser.FullName, newUser.birthday, newUser.UserName, newUser.Email, newUser.PhoneNumber, streak);
 
         var result = await _userManager.CreateAsync(user, password);
 
@@ -134,8 +137,9 @@ public class UserController : ControllerBase{
             return StatusCode(500, "Internal Server Error: Register User Unsuccessful");
         }
 
-        Streak streak = new Streak(user.Id, user);
-        _context.Streaks.Add(streak);
+        _context.Streaks.Find(streak)!.UserId = user.Id;
+        _context.Streaks.Find(streak)!.user = user;
+
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(CreateUser), (UserDTO)user);

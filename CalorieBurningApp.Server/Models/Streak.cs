@@ -8,7 +8,7 @@ public class Streak {
 
     [Key]
     [ForeignKey("user")]
-    public string UserId { get; private set; }
+    public string UserId { get; set; }
 
     [Required]
     public int count { get; private set; }
