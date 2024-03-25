@@ -1,0 +1,28 @@
+.entry-expandable {
+    background-color: green;
+    color: #333333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.header {
+    background-color: yellow;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dateTime {
+    font-weight: bold;
+}
+
+.arrow {
+    font-size: 14px;
+}
+
+.name {
+    padding: 10px;
+}

@@ -1,0 +1,19 @@
+.input-area{
+    background-color: white;
+    margin-left: 10px;
+    min-width: 200px;
+}
+
+.babel{
+    font-size: 18px;
+    min-width: 100px;
+    white-space: nowrap;
+    display: inline-block;
+    text-align: right;
+}
+
+.input-container{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
