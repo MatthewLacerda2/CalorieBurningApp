@@ -8,6 +8,7 @@ import UserPage from './Pages/User/UserPage/UserPage';
 import ManageEntriesPage from './Pages/User/ManageEntriesPage/ManageEntriesPage';
 import StreaksPage from './Pages/Leaderboard/Streaks/StreaksPage';
 import CaloriesPage from './Pages/Leaderboard/CaloriesPage/CaloriesPage';
+import SideBar from './Components/SideBar/SideBar';
 
 function App() {
     return (
