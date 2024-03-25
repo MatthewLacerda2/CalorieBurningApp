@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Card from '../Components/Card/Card';
+import Card from './Components/Card/Card';
 import '../Style/FormularyStyle.css';
 
 const Login: React.FC = () => {
