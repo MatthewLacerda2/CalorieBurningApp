@@ -15,7 +15,7 @@
 }
 
 .line {
-    height: 20px;
+    height: 1px;
     background-color: #666;
 }
 
@@ -28,4 +28,4 @@
 
 .item {
     margin-bottom: 10px;
-}  
+}

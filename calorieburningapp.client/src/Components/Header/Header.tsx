@@ -5,7 +5,7 @@ const Header: React.FC = () => {
   return (
     <div className="main-header">
       <div className="logo">
-        FixFlow
+        FURNACE
       </div>
     </div>
   );

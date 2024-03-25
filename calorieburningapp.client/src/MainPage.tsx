@@ -1,10 +1,9 @@
 import React from 'react';
+import RegisterLogin from './Components/MainPage/RegisterLogin';
 
 const MainPage: React.FC = () => {
   return (
-    <div>
-      <h1>Main Page is here</h1>
-    </div>
+    <RegisterLogin/>
   );
 }
 
