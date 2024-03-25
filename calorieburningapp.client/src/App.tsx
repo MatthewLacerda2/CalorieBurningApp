@@ -7,7 +7,6 @@ import UserPage from './Pages/User/UserPage/UserPage';
 import ManageEntriesPage from './Pages/User/ManageEntriesPage/ManageEntriesPage';
 import StreaksPage from './Pages/Leaderboard/Streaks/StreaksPage';
 import CaloriesPage from './Pages/Leaderboard/CaloriesPage/CaloriesPage';
-import RegisterPage from './Pages/RegisterPage';
 
 function App() {
     return (
@@ -15,7 +14,6 @@ function App() {
             <Header/>
             <Routes>                
                 <Route path="/" element={<MainPage/>} />
-                <Route path="/Register" element={<RegisterPage/>}/>
                 <Route path="*" element={<NotFoundPage/>}/>
                 <Route path="/User">
                     <Route index element={<UserPage/>}/>
