@@ -115,7 +115,7 @@ public class UserController : ControllerBase{
         _context.Streaks.Add(streak);
         await _context.SaveChangesAsync();
 
-        User user = new User(newUser.FullName, newUser.birthday, newUser.UserName, newUser.Email, newUser.PhoneNumber, streak);
+        User user = new User(newUser.FullName, newUser.birthday, newUser.UserName, newUser.Email, newUser.PhoneNumber);
         var result = await _userManager.CreateAsync(user, password);
 
         if (!result.Succeeded){

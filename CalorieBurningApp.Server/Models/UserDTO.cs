@@ -1,55 +1,70 @@
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace CalorieBurningApp.Server.Models;
 
 public class UserDTO{
 
+    [JsonProperty]
     [StringLength(50)]
     public string FullName { get; set; }
 
+    [JsonProperty]
     public DateOnly birthday { get; set; }
 
+    [JsonProperty]
     [Required]
     [StringLength(50)]
     public string UserName { get ; set; }
 
+    [JsonProperty]
     [Required]
     public string Id { get ; set; }
 
+    [JsonProperty]
     [Required]
     public string Email { get ; set; }
 
+    [JsonProperty]
     [Required]
     [StringLength(15)]
     public string PhoneNumber { get ; set; }
 
+    [JsonProperty]
     [Required]
     public DateTime createdDate { get ; set; }
 
+    [JsonProperty]
     [Required]
     public DateTime lastLogin { get ; set; }
 
+    [JsonProperty]
     [Required]
     public int burnedCalories { get ; set; }
 
-    [Required]
-    public Streak Streak { get; set; }
+    [JsonConstructor]
+    public UserDTO(){
+        this.FullName = string.Empty;
+        this.Id = string.Empty;
+        this.UserName = string.Empty;
+        this.Email = string.Empty;
+        this.PhoneNumber = string.Empty;
+    }
 
     public UserDTO( User user ) {
-        FullName = user.FullName;
-        birthday = user.birthday;
-        Id = user.Id;
-        UserName = user.UserName!;
-        Email = user.Email!;
-        PhoneNumber = user.PhoneNumber!;
-        createdDate = user.createdDate;
-        lastLogin = user.lastLogin;
-        burnedCalories = user.burnedCalories;
-        Streak = user.Streak;
+        this.FullName = user.FullName;
+        this.birthday = user.birthday;
+        this.Id = user.Id;
+        this.UserName = user.UserName!;
+        this.Email = user.Email!;
+        this.PhoneNumber = user.PhoneNumber!;
+        this.createdDate = user.createdDate;
+        this.lastLogin = user.lastLogin;
+        this.burnedCalories = user.burnedCalories;
     }
 
     public static explicit operator User(UserDTO userDTO){
-        return new User(userDTO.FullName, userDTO.birthday, userDTO.UserName, userDTO.Email, userDTO.PhoneNumber, userDTO.Streak);
+        return new User(userDTO.FullName, userDTO.birthday, userDTO.UserName, userDTO.Email, userDTO.PhoneNumber);
     }
 
     public static explicit operator UserDTO(User user){

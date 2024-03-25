@@ -26,10 +26,10 @@ public class User : IdentityUser {
         createdDate=DateTime.Now;
         lastLogin=createdDate;
 
-        Streak = new Streak();
+        Streak = null!;
     }
 
-    public User(string _fullName, DateOnly _birthday, string _userName, string _email, string _phoneNumber, Streak _streak){
+    public User(string _fullName, DateOnly _birthday, string _userName, string _email, string _phoneNumber){
         FullName = _fullName;
         birthday = _birthday;
 
@@ -40,6 +40,6 @@ public class User : IdentityUser {
         createdDate = DateTime.Now;
         lastLogin = DateTime.Now;
 
-        Streak = _streak;
+        Streak = null!;
     }
 }

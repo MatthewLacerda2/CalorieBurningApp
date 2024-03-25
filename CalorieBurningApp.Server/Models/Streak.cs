@@ -19,7 +19,7 @@ public class Streak {
     public Streak(){
         UserId = "";
         count=0;
-        User=new User();
+        User=null!;
     }
 
     public Streak(string userId, User user) {
