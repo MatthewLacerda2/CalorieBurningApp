@@ -95,50 +95,34 @@ public class UserController : ControllerBase{
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] UserDTO newUser, string password) {
 
-        if(!string.IsNullOrEmpty(newUser.UserName)){
-
-            var existingName = _context.Users.Where(c=>c.UserName == newUser.UserName);
-            if(existingName != null){
-                return BadRequest("UserName already registered!");
-            }
-
-        }else{
+        if(string.IsNullOrEmpty(newUser.UserName)) {
             return BadRequest("Empty UserName");
+        }else if (_context.Users.Any(c => c.UserName == newUser.UserName)){
+            return BadRequest("UserName already registered!");
         }
 
-        if(!string.IsNullOrEmpty(newUser.Email)){
-
-            var existingName = _context.Users.Where(c=>c.Email == newUser.Email);
-            if(existingName != null){
-                return BadRequest("Email already registered!");
-            }
-            
-        }else{
+        if (string.IsNullOrEmpty(newUser.Email)){
             return BadRequest("Empty Email");
+        }else if (_context.Users.Any(c => c.Email == newUser.Email)){
+            return BadRequest("Email already registered!");
         }
 
-        if(!string.IsNullOrEmpty(newUser.PhoneNumber)){
-
-            var existingName = _context.Users.Where(c=>c.PhoneNumber == newUser.PhoneNumber);
-            if(existingName != null){
-                return BadRequest("PhoneNumber already registered!");
-            }
-            
+        if (!string.IsNullOrEmpty(newUser.PhoneNumber) && _context.Users.Any(c => c.PhoneNumber == newUser.PhoneNumber)){
+            return BadRequest("PhoneNumber already registered!");
         }
 
         Streak streak = new Streak();
         _context.Streaks.Add(streak);
+        await _context.SaveChangesAsync();
 
         User user = new User(newUser.FullName, newUser.birthday, newUser.UserName, newUser.Email, newUser.PhoneNumber, streak);
-
         var result = await _userManager.CreateAsync(user, password);
 
-        if(!result.Succeeded){
+        if (!result.Succeeded){
             return StatusCode(500, "Internal Server Error: Register User Unsuccessful");
         }
 
-        _context.Streaks.Find(streak)!.UserId = user.Id;
-        _context.Streaks.Find(streak)!.User = user;
+        streak.UserId = user.Id;
 
         await _context.SaveChangesAsync();
 
