@@ -144,10 +144,26 @@ public class UserController : ControllerBase{
             return BadRequest("User does not Exist!");
         }
 
+        if (existingUser.UserName != upUser.UserName && _context.Users.Any(c => c.Email == upUser.UserName)){
+            return BadRequest("UserName already registered!");
+        }
+
+        if (!string.IsNullOrEmpty(upUser.Email) && existingUser.Email != upUser.Email && _context.Users.Any(c => c.Email == upUser.Email)){
+            return BadRequest("Email already registered!");
+        }
+
+        if (!string.IsNullOrEmpty(upUser.PhoneNumber)){
+            if(!StringChecker.HasNoLettersOrSpaces(upUser.PhoneNumber)){
+                return BadRequest("PhoneNumber had a letter or space!");
+            }else if(existingUser.PhoneNumber != upUser.PhoneNumber && _context.Users.Any(c => c.PhoneNumber == upUser.PhoneNumber)){
+                return BadRequest("PhoneNumber already registered!");
+            }
+        }
+
         existingUser.FullName = upUser.FullName;
-        existingUser.FullName = upUser.UserName;
-        existingUser.FullName = upUser.Email;
-        existingUser.FullName = upUser.PhoneNumber;
+        existingUser.UserName = upUser.UserName;
+        existingUser.Email = upUser.Email;
+        existingUser.PhoneNumber = upUser.PhoneNumber;
 
         await _context.SaveChangesAsync();
 
@@ -174,9 +190,16 @@ public class UserController : ControllerBase{
             _context.ExerciseEntries.RemoveRange(entriesToDelete);
         }
 
-        _context.Users.Remove(user);
         await _context.SaveChangesAsync();
 
-        return NoContent();
+        var result = await _userManager.DeleteAsync(user);
+        
+        await _context.SaveChangesAsync();
+
+        if(result.Succeeded){
+            return NoContent();
+        }else {
+            return StatusCode(500, "Internal Server Error: Delete User operation Unsuccessful\n\n" + result.Errors);
+        }
     }
 }

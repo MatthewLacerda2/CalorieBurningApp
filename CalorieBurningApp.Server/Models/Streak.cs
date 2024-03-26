@@ -7,7 +7,7 @@ namespace CalorieBurningApp.Server.Models;
 public class Streak {
 
     [Key]
-    [ForeignKey("User")]
+    [ForeignKey("UserId")]
     public string UserId { get; set; }
 
     [Required]

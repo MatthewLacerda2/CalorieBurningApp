@@ -16,4 +16,11 @@ public static class StringChecker {
 
         return hasUppercase && hasLowercase && hasDigit && hasSpecialChar;
     }
+
+    public static bool HasNoLettersOrSpaces(string entry) {
+        
+        Regex noLetterOrSpaceRegex = new Regex(@"^[^A-Za-z\s]+$");
+
+        return noLetterOrSpaceRegex.IsMatch(entry);
+    }
 }
