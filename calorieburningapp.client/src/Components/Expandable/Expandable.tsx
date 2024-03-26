@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import './Expandable.css';
 
 interface ExpandableProps {
   headline: string;
   content: string[];
+  children?: ReactNode[];
 }
 
-const Expandable: React.FC<ExpandableProps> = ({ headline, content }) => {
+const Expandable: React.FC<ExpandableProps> = ({ headline, content, children }) => {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => {
@@ -26,6 +27,7 @@ const Expandable: React.FC<ExpandableProps> = ({ headline, content }) => {
           ))}
         </div>
       )}
+      {children}
     </div>
   );
 };
