@@ -188,9 +188,9 @@ public class EntriesController : ControllerBase{
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExerciseEntry))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [HttpPatch]
-    public async Task<IActionResult> UpdateEntry([FromBody] ExerciseEntry upEntry) {
+    public async Task<IActionResult> UpdateEntry([FromBody] ExerciseEntry upEntry, string Id) {
 
-        var entryExists = _context.ExerciseEntries.Find(upEntry.Id);
+        var entryExists = _context.ExerciseEntries.Find(Id);
         if (entryExists==null) {
             return BadRequest("Entry does not Exist!");
         }
@@ -224,21 +224,17 @@ public class EntriesController : ControllerBase{
         return Ok(entryExists);
     }
 
-
-    [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(NoContentResult))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEntry(Guid id) {
-
-        var entry = _context.ExerciseEntries.Find(id);
-        if(entry == null){
+    public async Task<IActionResult> DeleteEntry(Guid id){
+        var entryExists = await _context.ExerciseEntries.FindAsync(id);
+        if (entryExists == null){
             return BadRequest("Entry does not Exist!");
         }
 
-        _context.ExerciseEntries.Remove(entry);
-        _context.Users.Find(entry.Id)!.burnedCalories -= entry.burnedCalories;
-
-        await _context.SaveChangesAsync();        
+        _context.ExerciseEntries.Remove(entryExists);
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }

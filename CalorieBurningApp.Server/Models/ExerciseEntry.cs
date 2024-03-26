@@ -7,7 +7,7 @@ namespace CalorieBurningApp.Server.Models;
 public class ExerciseEntry {
 
     [Key]
-    public Guid Id { get; private set; }
+    public string Id { get; private set; }
 
     public string userId { get; set; }
 
@@ -23,12 +23,13 @@ public class ExerciseEntry {
     public int burnedCalories { get; set; }
 
     public ExerciseEntry(){
+        Id = Guid.NewGuid().ToString();
         userId="";
         title="";
     }
 
     public ExerciseEntry(string _userId, EExercise _exercise, DateTime _dateTime, string _title, int _burnedCalories){
-        Id = Guid.NewGuid();
+        Id = Guid.NewGuid().ToString();
         userId = _userId;
         exercise = _exercise;
         dateTime = _dateTime;

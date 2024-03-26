@@ -180,8 +180,8 @@ public class UserController : ControllerBase{
         var user = await _userManager.FindByIdAsync(id);
         if (user == null){
             return BadRequest("User does not exist!");
-        }        
-
+        }
+        
         Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         Console.WriteLine("Ate aqui nos ajudou o Senhor");
 

@@ -12,7 +12,7 @@ using Server.Data;
 namespace CalorieBurningApp.Server.Migrations
 {
     [DbContext(typeof(ServerContext))]
-    [Migration("20240326202419_InitialCreate")]
+    [Migration("20240326211722_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -27,9 +27,8 @@ namespace CalorieBurningApp.Server.Migrations
 
             modelBuilder.Entity("CalorieBurningApp.Server.Models.ExerciseEntry", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("burnedCalories")
                         .HasColumnType("int");
