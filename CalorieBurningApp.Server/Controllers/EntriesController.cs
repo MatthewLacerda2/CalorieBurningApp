@@ -136,13 +136,14 @@ public class EntriesController : ControllerBase{
     [HttpPost]
     public async Task<IActionResult> CreateEntry([FromBody] ExerciseEntry newEntry) {
 
-        var userExists = _userManager.FindByIdAsync(newEntry.userId);
-        if(userExists==null){
+        var userExists = await _userManager.FindByIdAsync(newEntry.userId);
+        if (userExists==null){
             return BadRequest("User does not exist!");
         }
+        Console.WriteLine("CHEGOOOOOOU");
 
         if(newEntry.dateTime > DateTime.Now){
-            return BadRequest("Your Date-and-Time has not even paased yet!");
+            return BadRequest("Your Date-and-Time has not even passed yet!");
         }
 
         if(newEntry.burnedCalories <= 0){
@@ -150,19 +151,38 @@ public class EntriesController : ControllerBase{
         }
 
         _context.ExerciseEntries.Add(newEntry);
-
-        ExerciseEntry lastEntry = _context.ExerciseEntries.Where(e=>e.userId == newEntry.userId).OrderByDescending(e=>e.dateTime).Last();
-        DateTime yesterdayDate = DateTime.Now.AddDays(-1).Date;
-        bool wasPostedYesterday = lastEntry!.dateTime.Date == yesterdayDate;
-        if(wasPostedYesterday){
-            _context.Streaks.Where(s=>s.UserId == newEntry.userId).FirstOrDefault()!.Increment();
-        }
-
         await _context.SaveChangesAsync();
+
+        Console.WriteLine("Entry saved successfully");
+
+        // Perform the streak check after saving the entry
+        await CheckAndUpdateStreak(newEntry);
 
         var response = JsonConvert.SerializeObject(newEntry);
 
         return CreatedAtAction(nameof(CreateEntry), newEntry);
+    }
+
+    private async Task CheckAndUpdateStreak(ExerciseEntry newEntry){
+
+        // Retrieve the last entry asynchronously
+        var lastEntry = await _context.ExerciseEntries
+            .Where(e => e.userId == newEntry.userId)
+            .OrderByDescending(e => e.dateTime)
+            .FirstOrDefaultAsync();
+
+        // If there is no last entry or it was not posted yesterday, return
+        if (lastEntry == null || lastEntry.dateTime.Date != DateTime.Now.AddDays(-1).Date){
+            return;
+        }
+
+        // Otherwise, update the streak
+        var streak = await _context.Streaks.FirstOrDefaultAsync(s => s.UserId == newEntry.userId);
+        if (streak != null){
+            streak.Increment();
+            await _context.SaveChangesAsync();
+            Console.WriteLine("Streak updated successfully");
+        }
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExerciseEntry))]

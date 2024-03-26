@@ -9,7 +9,6 @@ public class ExerciseEntry {
     [Key]
     public Guid Id { get; private set; }
 
-    [ForeignKey("userId")]
     public string userId { get; set; }
 
     [Required]

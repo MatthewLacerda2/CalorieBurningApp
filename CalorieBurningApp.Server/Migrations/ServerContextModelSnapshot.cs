@@ -44,13 +44,11 @@ namespace CalorieBurningApp.Server.Migrations
 
                     b.Property<string>("userId")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("userId");
-
-                    b.ToTable("ExerciseEntries");
+                    b.ToTable("ExerciseEntries", (string)null);
                 });
 
             modelBuilder.Entity("CalorieBurningApp.Server.Models.Streak", b =>
@@ -66,7 +64,7 @@ namespace CalorieBurningApp.Server.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Streaks");
+                    b.ToTable("Streaks", (string)null);
                 });
 
             modelBuilder.Entity("CalorieBurningApp.Server.Models.User", b =>
@@ -135,25 +133,7 @@ namespace CalorieBurningApp.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("CalorieBurningApp.Server.Models.ExerciseEntry", b =>
-                {
-                    b.HasOne("CalorieBurningApp.Server.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CalorieBurningApp.Server.Models.Streak", b =>
-                {
-                    b.HasOne("CalorieBurningApp.Server.Models.User", null)
-                        .WithOne()
-                        .HasForeignKey("CalorieBurningApp.Server.Models.Streak", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("Users", (string)null);
                 });
 #pragma warning restore 612, 618
         }
