@@ -196,23 +196,34 @@ public class EntriesController : ControllerBase{
         }
 
         if(upEntry.dateTime > DateTime.Now){
-            return BadRequest("Your Date-and-Time has not even paased yet!");
+            return BadRequest("Your Date-and-Time has not even passed yet!");
         }
 
-        if(upEntry.burnedCalories <= 0){
+        if (upEntry.burnedCalories <= 0){
             return BadRequest("Calories must be a natural number greater than 0");
         }
 
-        int caloryUpdate = upEntry.burnedCalories - entryExists.burnedCalories;
-        _context.Users.Find(upEntry.Id)!.burnedCalories += caloryUpdate;
+        // Update the properties of the existing entry
+        entryExists.userId = upEntry.userId;
+        entryExists.exercise = upEntry.exercise;
+        entryExists.dateTime = upEntry.dateTime;
+        entryExists.title = upEntry.title;
+        entryExists.burnedCalories = upEntry.burnedCalories;
 
-        entryExists = upEntry;
+        // Calculate the calorie difference
+        int calorieUpdate = upEntry.burnedCalories - entryExists.burnedCalories;
+
+        // Find the user related to this entry and update the burned calories
+        var user = await _context.Users.FindAsync(entryExists.userId);
+        if (user != null){
+            user.burnedCalories += calorieUpdate;
+        }
+
         await _context.SaveChangesAsync();
 
-        var response = JsonConvert.SerializeObject(entryExists);
-
-        return Ok(response);
+        return Ok(entryExists);
     }
+
 
     [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(NoContentResult))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
