@@ -177,29 +177,32 @@ public class UserController : ControllerBase{
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id) {
 
-        var user = await _context.Users.FindAsync(id);
-        if(user == null){
-            return BadRequest("User does not Exist!");
+        var user = _context.Users.FirstOrDefault(u => u.Id == id);
+        if (user == null){
+            return BadRequest("User does not exist!");
+        }        
+
+        var streak = _context.Streaks.FirstOrDefault(e => e.UserId == id);
+        if (streak != null){
+            _context.Streaks.Remove(streak);
         }
 
-        var streak = await _context.Streaks.FirstOrDefaultAsync(e => e.UserId == id);
-        _context.Streaks.Remove(streak!);
-
         var entriesToDelete = _context.ExerciseEntries.Where(e => e.userId == id).ToArray();
-        if (entriesToDelete.Length > 0) {
+        if (entriesToDelete.Length > 0){
             _context.ExerciseEntries.RemoveRange(entriesToDelete);
         }
 
-        await _context.SaveChangesAsync();
+        Console.WriteLine("Ate aqui nos ajudou o Senhor");
 
         var result = await _userManager.DeleteAsync(user);
-        
-        await _context.SaveChangesAsync();
+
+        _context.SaveChanges();
 
         if(result.Succeeded){
             return NoContent();
-        }else {
-            return StatusCode(500, "Internal Server Error: Delete User operation Unsuccessful\n\n" + result.Errors);
+        }else{
+            
+            return StatusCode(500, "Internal Server Error: Delete User operation unsuccessful\n\n" + string.Join(",", result.Errors.Select(e => e.Description)));
         }
     }
 }
