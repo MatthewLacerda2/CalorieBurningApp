@@ -26,29 +26,8 @@ public class ServerContext : DbContext {
 
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<User>()
-            .HasKey(u => u.Id);
-
-        modelBuilder.Entity<Streak>()
-            .HasKey(s => s.UserId);
-
-        modelBuilder.Entity<ExerciseEntry>()
-            .HasKey(e => e.Id);
-
-        modelBuilder.Entity<ExerciseEntry>()
-            .HasOne<User>()
-            .WithMany()
-            .HasForeignKey(e => e.userId)
-            .OnDelete(DeleteBehavior.Cascade); // Explicit cascade delete configuration
-
-        modelBuilder.Entity<Streak>()
-            .HasOne<User>()
-            .WithOne()
-            .HasForeignKey<Streak>(s => s.UserId)
-            .OnDelete(DeleteBehavior.Cascade); // Explicit cascade delete configuration
-
-        modelBuilder.Entity<User>()
-            .Property(u => u.Id)
-            .ValueGeneratedNever();
+        modelBuilder.Entity<User>(entity => { entity.ToTable("Users"); });
+        modelBuilder.Entity<Streak>(entity => { entity.ToTable("Streaks"); });
+        modelBuilder.Entity<ExerciseEntry>(entity => { entity.ToTable("ExerciseEntries"); });
     }
 }

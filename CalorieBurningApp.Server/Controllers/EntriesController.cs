@@ -136,13 +136,14 @@ public class EntriesController : ControllerBase{
     [HttpPost]
     public async Task<IActionResult> CreateEntry([FromBody] ExerciseEntry newEntry) {
 
-        var userExists = _userManager.FindByIdAsync(newEntry.userId);
-        if(userExists==null){
+        var userExists = await _userManager.FindByIdAsync(newEntry.userId);
+        if (userExists==null){
             return BadRequest("User does not exist!");
         }
+        Console.WriteLine("CHEGOOOOOOU");
 
         if(newEntry.dateTime > DateTime.Now){
-            return BadRequest("Your Date-and-Time has not even paased yet!");
+            return BadRequest("Your Date-and-Time has not even passed yet!");
         }
 
         if(newEntry.burnedCalories <= 0){
@@ -150,64 +151,90 @@ public class EntriesController : ControllerBase{
         }
 
         _context.ExerciseEntries.Add(newEntry);
-
-        ExerciseEntry lastEntry = _context.ExerciseEntries.Where(e=>e.userId == newEntry.userId).OrderByDescending(e=>e.dateTime).Last();
-        DateTime yesterdayDate = DateTime.Now.AddDays(-1).Date;
-        bool wasPostedYesterday = lastEntry!.dateTime.Date == yesterdayDate;
-        if(wasPostedYesterday){
-            _context.Streaks.Where(s=>s.UserId == newEntry.userId).FirstOrDefault()!.Increment();
-        }
-
         await _context.SaveChangesAsync();
+
+        Console.WriteLine("Entry saved successfully");
+
+        // Perform the streak check after saving the entry
+        await CheckAndUpdateStreak(newEntry);
 
         var response = JsonConvert.SerializeObject(newEntry);
 
         return CreatedAtAction(nameof(CreateEntry), newEntry);
     }
 
+    private async Task CheckAndUpdateStreak(ExerciseEntry newEntry){
+
+        // Retrieve the last entry asynchronously
+        var lastEntry = await _context.ExerciseEntries
+            .Where(e => e.userId == newEntry.userId)
+            .OrderByDescending(e => e.dateTime)
+            .FirstOrDefaultAsync();
+
+        // If there is no last entry or it was not posted yesterday, return
+        if (lastEntry == null || lastEntry.dateTime.Date != DateTime.Now.AddDays(-1).Date){
+            return;
+        }
+
+        // Otherwise, update the streak
+        var streak = await _context.Streaks.FirstOrDefaultAsync(s => s.UserId == newEntry.userId);
+        if (streak != null){
+            streak.Increment();
+            await _context.SaveChangesAsync();
+            Console.WriteLine("Streak updated successfully");
+        }
+    }
+
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExerciseEntry))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [HttpPatch]
-    public async Task<IActionResult> UpdateEntry([FromBody] ExerciseEntry upEntry) {
+    public async Task<IActionResult> UpdateEntry([FromBody] ExerciseEntry upEntry, string Id) {
 
-        var entryExists = _context.ExerciseEntries.Find(upEntry.Id);
+        var entryExists = _context.ExerciseEntries.Find(Id);
         if (entryExists==null) {
             return BadRequest("Entry does not Exist!");
         }
 
         if(upEntry.dateTime > DateTime.Now){
-            return BadRequest("Your Date-and-Time has not even paased yet!");
+            return BadRequest("Your Date-and-Time has not even passed yet!");
         }
 
-        if(upEntry.burnedCalories <= 0){
+        if (upEntry.burnedCalories <= 0){
             return BadRequest("Calories must be a natural number greater than 0");
         }
 
-        int caloryUpdate = upEntry.burnedCalories - entryExists.burnedCalories;
-        _context.Users.Find(upEntry.Id)!.burnedCalories += caloryUpdate;
+        // Update the properties of the existing entry
+        entryExists.userId = upEntry.userId;
+        entryExists.exercise = upEntry.exercise;
+        entryExists.dateTime = upEntry.dateTime;
+        entryExists.title = upEntry.title;
+        entryExists.burnedCalories = upEntry.burnedCalories;
 
-        entryExists = upEntry;
+        // Calculate the calorie difference
+        int calorieUpdate = upEntry.burnedCalories - entryExists.burnedCalories;
+
+        // Find the user related to this entry and update the burned calories
+        var user = await _context.Users.FindAsync(entryExists.userId);
+        if (user != null){
+            user.burnedCalories += calorieUpdate;
+        }
+
         await _context.SaveChangesAsync();
 
-        var response = JsonConvert.SerializeObject(entryExists);
-
-        return Ok(response);
+        return Ok(entryExists);
     }
 
-    [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(NoContentResult))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEntry(Guid id) {
-
-        var entry = _context.ExerciseEntries.Find(id);
-        if(entry == null){
+    public async Task<IActionResult> DeleteEntry(Guid id){
+        var entryExists = await _context.ExerciseEntries.FindAsync(id);
+        if (entryExists == null){
             return BadRequest("Entry does not Exist!");
         }
 
-        _context.ExerciseEntries.Remove(entry);
-        _context.Users.Find(entry.Id)!.burnedCalories -= entry.burnedCalories;
-
-        await _context.SaveChangesAsync();        
+        _context.ExerciseEntries.Remove(entryExists);
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }

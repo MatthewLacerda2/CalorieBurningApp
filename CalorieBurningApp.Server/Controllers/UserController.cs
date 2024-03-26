@@ -175,13 +175,13 @@ public class UserController : ControllerBase{
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(string id) {
+    public async Task<IActionResult> DeleteUser(string id){
 
-        var user = _context.Users.FirstOrDefault(u => u.Id == id);
+        var user = await _userManager.FindByIdAsync(id);
         if (user == null){
             return BadRequest("User does not exist!");
-        }        
-
+        }
+        
         Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         Console.WriteLine("Ate aqui nos ajudou o Senhor");
 
@@ -189,12 +189,11 @@ public class UserController : ControllerBase{
 
         Console.WriteLine("Aqui nao chegou");
 
-        _context.SaveChanges();
+
 
         if(result.Succeeded){
             return NoContent();
         }else{
-            
             return StatusCode(500, "Internal Server Error: Delete User operation unsuccessful\n\n" + string.Join(",", result.Errors.Select(e => e.Description)));
         }
     }
