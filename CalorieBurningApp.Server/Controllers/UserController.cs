@@ -182,19 +182,12 @@ public class UserController : ControllerBase{
             return BadRequest("User does not exist!");
         }        
 
-        var streak = _context.Streaks.FirstOrDefault(e => e.UserId == id);
-        if (streak != null){
-            _context.Streaks.Remove(streak);
-        }
-
-        var entriesToDelete = _context.ExerciseEntries.Where(e => e.userId == id).ToArray();
-        if (entriesToDelete.Length > 0){
-            _context.ExerciseEntries.RemoveRange(entriesToDelete);
-        }
-
+        Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         Console.WriteLine("Ate aqui nos ajudou o Senhor");
 
         var result = await _userManager.DeleteAsync(user);
+
+        Console.WriteLine("Aqui nao chegou");
 
         _context.SaveChanges();
 

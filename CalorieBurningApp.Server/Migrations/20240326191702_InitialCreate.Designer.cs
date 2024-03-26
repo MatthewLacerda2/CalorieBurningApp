@@ -12,7 +12,7 @@ using Server.Data;
 namespace CalorieBurningApp.Server.Migrations
 {
     [DbContext(typeof(ServerContext))]
-    [Migration("20240326175115_InitialCreate")]
+    [Migration("20240326191702_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

@@ -38,12 +38,14 @@ public class ServerContext : DbContext {
         modelBuilder.Entity<ExerciseEntry>()
             .HasOne<User>()
             .WithMany()
-            .HasForeignKey(e => e.userId);
+            .HasForeignKey(e => e.userId)
+            .OnDelete(DeleteBehavior.Cascade); // Explicit cascade delete configuration
 
         modelBuilder.Entity<Streak>()
             .HasOne<User>()
             .WithOne()
-            .HasForeignKey<Streak>(s => s.UserId);
+            .HasForeignKey<Streak>(s => s.UserId)
+            .OnDelete(DeleteBehavior.Cascade); // Explicit cascade delete configuration
 
         modelBuilder.Entity<User>()
             .Property(u => u.Id)
