@@ -16,7 +16,16 @@ public class User : IdentityUser {
     [Required]
     public DateTime lastLogin { get ; set; }
 
+    [Required]
     public int burnedCalories { get ; set; }
+
+    public User(){
+        FullName=string.Empty;
+        
+        createdDate=DateTime.Now;
+        lastLogin=createdDate;
+        birthday=DateOnly.MinValue;
+    }
 
     public User(string _fullName, DateOnly _birthday, string _userName, string _email, string _phoneNumber){
         FullName = _fullName;

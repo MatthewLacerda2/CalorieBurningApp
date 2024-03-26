@@ -8,7 +8,6 @@ using Server.Data;
 
 namespace CalorieBurningApp.Server.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("api/v1/leaderboard")]
 [Produces("application/json")]
@@ -20,21 +19,6 @@ public class LeaderboardController : ControllerBase{
     public LeaderboardController(ServerContext context, UserManager<User> userManager){
         _context = context;
         _userManager = userManager;
-    }
-
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseEntry>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
-    [HttpGet("{id}")]
-    public async Task<IActionResult> ReadByUserId(string userId) {
-
-        var user = await _context.Users.FindAsync(userId);
-        if(user==null){
-            return NotFound();
-        }
-
-        var response = JsonConvert.SerializeObject((UserDTO)user);
-
-        return Ok(response);
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDTO[]>))]

@@ -8,7 +8,6 @@ using Server.Data;
 
 namespace CalorieBurningApp.Server.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("api/v1/users")]
 [Produces("application/json")]
@@ -96,48 +95,41 @@ public class UserController : ControllerBase{
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] UserDTO newUser, string password) {
 
-        if(!string.IsNullOrEmpty(newUser.UserName)){
-
-            var existingName = _context.Users.Where(c=>c.UserName == newUser.UserName);
-            if(existingName != null){
-                return BadRequest("UserName already registered!");
-            }
-
-        }else{
+        if(string.IsNullOrEmpty(newUser.UserName)) {
             return BadRequest("Empty UserName");
+        }else if (_context.Users.Any(c => c.UserName == newUser.UserName)){
+            return BadRequest("UserName already registered!");
         }
 
-        if(!string.IsNullOrEmpty(newUser.Email)){
-
-            var existingName = _context.Users.Where(c=>c.Email == newUser.Email);
-            if(existingName != null){
-                return BadRequest("Email already registered!");
-            }
-            
-        }else{
+        if (string.IsNullOrEmpty(newUser.Email)){
             return BadRequest("Empty Email");
+        }else if (_context.Users.Any(c => c.Email == newUser.Email)){
+            return BadRequest("Email already registered!");
         }
 
-        if(!string.IsNullOrEmpty(newUser.PhoneNumber)){
-
-            var existingName = _context.Users.Where(c=>c.PhoneNumber == newUser.PhoneNumber);
-            if(existingName != null){
-                return BadRequest("PhoneNumber already registered!");
-            }
-            
+        if (!string.IsNullOrEmpty(newUser.PhoneNumber) && _context.Users.Any(c => c.PhoneNumber == newUser.PhoneNumber)){
+            return BadRequest("PhoneNumber already registered!");
         }
+
+        if(!StringChecker.IsPasswordStrong(password)){
+            return BadRequest("Password must have an Upper-Case, a Lower-Case, a number and a special character");
+        }
+
+        newUser.createdDate = DateTime.Now;
+        newUser.lastLogin = DateTime.Now;
+        newUser.burnedCalories = 0;
 
         User user = new User(newUser.FullName, newUser.birthday, newUser.UserName, newUser.Email, newUser.PhoneNumber);
-
         var result = await _userManager.CreateAsync(user, password);
 
-        if(!result.Succeeded){
-            return StatusCode(500, "Internal Server Error: Register User Unsuccessful");
-        }
-
-        Streak streak = new Streak(user.Id, user);
+        Streak streak = new Streak(user.Id);
         _context.Streaks.Add(streak);
+
         await _context.SaveChangesAsync();
+
+        if (!result.Succeeded){
+            return StatusCode(500, "Internal Server Error: Registrar Usuario Unsuccessful\n\n" + result.Errors);
+        }
 
         return CreatedAtAction(nameof(CreateUser), (UserDTO)user);
     }
@@ -152,35 +144,58 @@ public class UserController : ControllerBase{
             return BadRequest("User does not Exist!");
         }
 
-        existingUser = (User)upUser;
+        if (existingUser.UserName != upUser.UserName && _context.Users.Any(c => c.Email == upUser.UserName)){
+            return BadRequest("UserName already registered!");
+        }
+
+        if (!string.IsNullOrEmpty(upUser.Email) && existingUser.Email != upUser.Email && _context.Users.Any(c => c.Email == upUser.Email)){
+            return BadRequest("Email already registered!");
+        }
+
+        if (!string.IsNullOrEmpty(upUser.PhoneNumber)){
+            if(!StringChecker.HasNoLettersOrSpaces(upUser.PhoneNumber)){
+                return BadRequest("PhoneNumber had a letter or space!");
+            }else if(existingUser.PhoneNumber != upUser.PhoneNumber && _context.Users.Any(c => c.PhoneNumber == upUser.PhoneNumber)){
+                return BadRequest("PhoneNumber already registered!");
+            }
+        }
+
+        existingUser.FullName = upUser.FullName;
+        existingUser.UserName = upUser.UserName;
+        existingUser.Email = upUser.Email;
+        existingUser.PhoneNumber = upUser.PhoneNumber;
 
         await _context.SaveChangesAsync();
 
-        var response = JsonConvert.SerializeObject((UserDTO)existingUser);
+        var response = JsonConvert.SerializeObject(upUser);
 
         return Ok(response);
     }
 
-    [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(NoContentResult))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id) {
 
-        var user = _context.Users.Find(id);
-        if(user == null){
-            return BadRequest("User does not Exist!");
+        var user = _context.Users.FirstOrDefault(u => u.Id == id);
+        if (user == null){
+            return BadRequest("User does not exist!");
+        }        
+
+        Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        Console.WriteLine("Ate aqui nos ajudou o Senhor");
+
+        var result = await _userManager.DeleteAsync(user);
+
+        Console.WriteLine("Aqui nao chegou");
+
+        _context.SaveChanges();
+
+        if(result.Succeeded){
+            return NoContent();
+        }else{
+            
+            return StatusCode(500, "Internal Server Error: Delete User operation unsuccessful\n\n" + string.Join(",", result.Errors.Select(e => e.Description)));
         }
-
-        var streaksToDelete = await _context.Streaks.Where(s => s.UserId == id).ToArrayAsync();
-        _context.Streaks.RemoveRange(streaksToDelete);
-
-        var entriesToDelete = await _context.ExerciseEntries.Where( e => e.userId == id).ToArrayAsync();
-        _context.ExerciseEntries.RemoveRange(entriesToDelete);
-
-        _context.Users.Remove(user);
-
-        await _context.SaveChangesAsync();        
-
-        return NoContent();
     }
 }

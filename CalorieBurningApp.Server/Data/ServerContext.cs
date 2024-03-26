@@ -13,27 +13,42 @@ public class ServerContext : DbContext {
 
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+
+        base.OnConfiguring(optionsBuilder);
+
+        optionsBuilder.UseMySql(
+            "Server=localhost;Port=3306;Database=sqlcalories;User=lendacerda;Password=xpvista7810;",
+            new MariaDbServerVersion(new Version(10, 5, 11)));
+    }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
-        // Configure primary keys
-        modelBuilder.Entity<ExerciseEntry>()
-            .HasKey(e => e.Id);
+        base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<User>()
             .HasKey(u => u.Id);
 
         modelBuilder.Entity<Streak>()
-            .HasKey(ucd => ucd.UserId);
+            .HasKey(s => s.UserId);
 
-        // Define foreign key relationships
         modelBuilder.Entity<ExerciseEntry>()
-            .HasOne(e => e.userId)
+            .HasKey(e => e.Id);
+
+        modelBuilder.Entity<ExerciseEntry>()
+            .HasOne<User>()
             .WithMany()
-            .HasForeignKey(e => e.userId);
+            .HasForeignKey(e => e.userId)
+            .OnDelete(DeleteBehavior.Cascade); // Explicit cascade delete configuration
 
         modelBuilder.Entity<Streak>()
-            .HasOne(ucd => ucd.UserId)
-            .WithMany()
-            .HasForeignKey(ucd => ucd.UserId);
+            .HasOne<User>()
+            .WithOne()
+            .HasForeignKey<Streak>(s => s.UserId)
+            .OnDelete(DeleteBehavior.Cascade); // Explicit cascade delete configuration
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.Id)
+            .ValueGeneratedNever();
     }
 }

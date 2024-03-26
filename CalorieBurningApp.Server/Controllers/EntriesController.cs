@@ -8,7 +8,6 @@ using Server.Data;
 
 namespace CalorieBurningApp.Server.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("api/v1/entries")]
 [Produces("application/json")]
@@ -40,7 +39,7 @@ public class EntriesController : ControllerBase{
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseEntry[]>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [HttpGet]
-    public async Task<IActionResult> ReadEntries(EExercise[]? exercises, DateTime? datetimeMin, DateTime? datetimeMax,
+    public async Task<IActionResult> ReadEntries([FromBody] EExercise[]? exercises, DateTime? datetimeMin, DateTime? datetimeMax,
                                                 string? userId, string? title, int? burnedCaloriesMin, int? burnedCaloriesMax,
                                                 int? offset, int limit, string? sort) {
 
@@ -149,12 +148,10 @@ public class EntriesController : ControllerBase{
         if(newEntry.burnedCalories <= 0){
             return BadRequest("Calories must be a natural number greater than 0");
         }
-        
-        newEntry.user.burnedCalories += newEntry.burnedCalories;
 
         _context.ExerciseEntries.Add(newEntry);
 
-        ExerciseEntry lastEntry = _context.ExerciseEntries.Where(e=>e.userId == newEntry.userId).OrderByDescending(e=>e.dateTime).FirstOrDefault()!;
+        ExerciseEntry lastEntry = _context.ExerciseEntries.Where(e=>e.userId == newEntry.userId).OrderByDescending(e=>e.dateTime).Last();
         DateTime yesterdayDate = DateTime.Now.AddDays(-1).Date;
         bool wasPostedYesterday = lastEntry!.dateTime.Date == yesterdayDate;
         if(wasPostedYesterday){
@@ -187,7 +184,7 @@ public class EntriesController : ControllerBase{
         }
 
         int caloryUpdate = upEntry.burnedCalories - entryExists.burnedCalories;
-        upEntry.user.burnedCalories += caloryUpdate;
+        _context.Users.Find(upEntry.Id)!.burnedCalories += caloryUpdate;
 
         entryExists = upEntry;
         await _context.SaveChangesAsync();
@@ -207,9 +204,8 @@ public class EntriesController : ControllerBase{
             return BadRequest("Entry does not Exist!");
         }
 
-        entry.user.burnedCalories -= entry.burnedCalories;
-
         _context.ExerciseEntries.Remove(entry);
+        _context.Users.Find(entry.Id)!.burnedCalories -= entry.burnedCalories;
 
         await _context.SaveChangesAsync();        
 

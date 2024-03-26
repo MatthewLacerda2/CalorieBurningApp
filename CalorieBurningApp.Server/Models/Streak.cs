@@ -1,28 +1,35 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace CalorieBurningApp.Server.Models;
 
 public class Streak {
 
     [Key]
-    [ForeignKey("user")]
-    public string UserId { get; private set; }
+    [ForeignKey("UserId")]
+    public string UserId { get; set; }
 
     [Required]
-    public int count { get; private set; }
+    public int count { get; set; }
 
-    [JsonIgnore]
-    public User user { get; set; }
+    [Required]
+    public int record { get; private set; }
 
-    public Streak(string _userId, User myUser) {
-        UserId = _userId;
-        user = myUser;
+    public Streak(){
+        UserId = "";
+    }
+
+    public Streak(string userId) {
+        UserId = userId;
     }
 
     public void Increment(){
         count++;
+
+        if(record > count){
+            record = count;
+        }
     }
 
     public void Lose(){ //Tough luck
