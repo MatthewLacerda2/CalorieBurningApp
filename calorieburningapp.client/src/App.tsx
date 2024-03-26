@@ -5,8 +5,7 @@ import MainPage from './MainPage';
 import NotFoundPage from './NotFoundPage';
 import UserPage from './Pages/User/UserPage/UserPage';
 import ManageEntriesPage from './Pages/User/ManageEntriesPage/ManageEntriesPage';
-import StreaksPage from './Pages/Leaderboard/Streaks/StreaksPage';
-import CaloriesPage from './Pages/Leaderboard/CaloriesPage/CaloriesPage';
+import LeaderboardPage from './Pages/Leaderboard/StreaksPage';
 
 function App() {
     return (
@@ -19,10 +18,7 @@ function App() {
                     <Route index element={<UserPage/>}/>
                     <Route path="ManageEntries" element={<ManageEntriesPage/>}/>
                 </Route>
-                <Route path="/Leaderboard">
-                    <Route path="Streaks" element={<StreaksPage/>}/>
-                    <Route path="Calories" element={<CaloriesPage/>}/>
-                </Route>
+                <Route path="/Leaderboard" element={<LeaderboardPage/>}/>
             </Routes>
         </div>
     );
