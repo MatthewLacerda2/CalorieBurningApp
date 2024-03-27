@@ -27,7 +27,7 @@ public class EntriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseEntry>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [HttpGet("{id}")]
-    public async Task<IActionResult> ReadEntry(Guid id)
+    public async Task<IActionResult> ReadEntry(string id)
     {
 
         var entry = await _context.ExerciseEntries.FindAsync(id);
@@ -254,7 +254,7 @@ public class EntriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEntry(Guid id)
+    public async Task<IActionResult> DeleteEntry(string id)
     {
         var entryExists = await _context.ExerciseEntries.FindAsync(id);
         if (entryExists == null)

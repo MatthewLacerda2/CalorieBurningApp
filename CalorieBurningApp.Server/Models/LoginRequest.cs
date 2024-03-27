@@ -6,9 +6,9 @@ public class LoginRequest
 {
 
     [JsonProperty]
-    public string? UserName;
+    public string? UserName { get; set; }
 
     [JsonProperty]
-    public string? Password;
+    public string? Password { get; set; }
 
 }

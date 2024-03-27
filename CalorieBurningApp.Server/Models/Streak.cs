@@ -30,7 +30,7 @@ public class Streak
     {
         count++;
 
-        if (record > count)
+        if (record < count)
         {
             record = count;
         }

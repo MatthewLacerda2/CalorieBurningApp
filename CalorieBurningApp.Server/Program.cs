@@ -10,12 +10,12 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddIdentityCore<User>()
-            .AddEntityFrameworkStores<ServerContext>()
-            .AddDefaultTokenProviders();
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<ServerContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddDbContext<ServerContext>(options =>
-            options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 23))));
+    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 23))));
 
 var secretKey = builder.Configuration["Jwt:SecretKey"];
 var verifiedIssuerSigningKey = secretKey != null ? new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
