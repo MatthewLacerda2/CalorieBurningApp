@@ -9,7 +9,6 @@ interface EntriesTableProps {
 
 const EntriesTable: React.FC<EntriesTableProps> = ({ filter }) => {
   const [entries, setEntries] = useState<ExerciseEntry[]>([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,7 +18,7 @@ const EntriesTable: React.FC<EntriesTableProps> = ({ filter }) => {
         }
 
         const response = await axios.get(url, { params: filter });
-        console.log(response);
+
         if (Array.isArray(response.data)) {
           const exerciseEntries: ExerciseEntry[] = response.data.map(
             (entry: any) => ({
