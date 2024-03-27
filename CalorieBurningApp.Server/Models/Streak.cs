@@ -4,7 +4,8 @@ using Newtonsoft.Json;
 
 namespace CalorieBurningApp.Server.Models;
 
-public class Streak {
+public class Streak
+{
 
     [Key]
     public string UserId { get; set; }
@@ -15,23 +16,28 @@ public class Streak {
     [Required]
     public int record { get; private set; }
 
-    public Streak(){
+    public Streak()
+    {
         UserId = "";
     }
 
-    public Streak(string userId) {
+    public Streak(string userId)
+    {
         UserId = userId;
     }
 
-    public void Increment(){
+    public void Increment()
+    {
         count++;
 
-        if(record > count){
+        if (record > count)
+        {
             record = count;
         }
     }
 
-    public void Lose(){ //Tough luck
+    public void Lose()
+    { //Tough luck
         count = 0;
     }
 }
