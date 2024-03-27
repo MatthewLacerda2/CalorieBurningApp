@@ -15,12 +15,10 @@ public class LeaderboardController : ControllerBase
 {
 
     private readonly ServerContext _context;
-    private readonly UserManager<User> _userManager;
 
-    public LeaderboardController(ServerContext context, UserManager<User> userManager)
+    public LeaderboardController(ServerContext context)
     {
         _context = context;
-        _userManager = userManager;
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDTO[]>))]
@@ -54,8 +52,6 @@ public class LeaderboardController : ControllerBase
             return NotFound("You skipped too many");
         }
 
-        var response = JsonConvert.SerializeObject(resultsArray);
-
-        return Ok(response);
+        return Ok(resultsArray);
     }
 }

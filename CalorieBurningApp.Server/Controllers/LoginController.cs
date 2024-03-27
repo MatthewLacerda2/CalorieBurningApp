@@ -31,32 +31,28 @@ public class LoginController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginRequest model)
     {
 
-        model.UserName = "lendacerda";
-        model.Password = "@Xpvista7810";
-
         if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
         {
             return BadRequest("Invalid UserName or Password. Username: " + model.UserName + " , " + model.Password);
         }
-        Console.WriteLine("chegou aqui2");
+
         var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, false);
-        Console.WriteLine("chegou aqui");
 
         if (result.Succeeded)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
-            var token = GenerateToken(user!);       //This is line 48
-            Console.WriteLine("SUCESSO");
+            var token = GenerateToken(user!);
+
             return Ok(new { token });
         }
-        Console.WriteLine("FRACASSO");
+
         return Unauthorized();
     }
 
     private string GenerateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF32.GetBytes(_configuration["Jwt:SecretKey"]!);   //This is line 59
+        var key = Encoding.UTF32.GetBytes(_configuration["Jwt:SecretKey"]!);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
