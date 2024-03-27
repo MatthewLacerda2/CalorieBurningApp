@@ -1,65 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { ExerciseEntry } from '../../../Data/ExerciseEntry';
-import './EntriesTable.css';
-import EExercise from '../../../Data/EExercise';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./EntriesTable.css";
+import { ExerciseEntry } from "../../../Data/ExerciseEntry";
 
 interface EntriesTableProps {
   filter: GETEntriesFilter;
 }
 
 const EntriesTable: React.FC<EntriesTableProps> = ({ filter }) => {
-
   const [entries, setEntries] = useState<ExerciseEntry[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let url = 'http://localhost:5071/api/v1/entries';
+        let url = "http://localhost:5071/api/v1/entries";
         if (filter.userId) {
           url += `/${filter.userId}`;
         }
 
         const response = await axios.get(url, { params: filter });
+        console.log(response);
         if (Array.isArray(response.data)) {
-        const exerciseEntries: ExerciseEntry[] = response.data.map((entry: any) => ({
-            Id: entry.Id,
-            userId: entry.userId,
-            exercise: entry.exercise,
-            dateTime: new Date(entry.dateTime),
-            title: entry.title,
-            burnedCalories: entry.burnedCalories
-        }));
-        setEntries(exerciseEntries);
+          const exerciseEntries: ExerciseEntry[] = response.data.map(
+            (entry: any) => ({
+              Id: entry.Id,
+              userId: entry.userId,
+              exercise: entry.exercise,
+              dateTime: new Date(entry.dateTime),
+              title: entry.title,
+              burnedCalories: entry.burnedCalories,
+            })
+          );
+          setEntries(exerciseEntries);
         } else {
-        console.error('Error: response data is not an array');
-        console.log(response.data);
-
-        // Placeholder data
-        const exerciseEntries: ExerciseEntry[] = [
-            {
-            Id: "1",
-            userId: "user1",
-            exercise: EExercise.walking,
-            dateTime: new Date(),
-            title: "Morning Run",
-            burnedCalories: 200
-            },
-            {
-            Id: "2",
-            userId: "user2",
-            exercise: EExercise.cycling,
-            dateTime: new Date(),
-            title: "Afternoon Ride",
-            burnedCalories: 150
-            }
-        ];
-
-        setEntries(exerciseEntries);
+          console.error(
+            "Error: response data is not an array. " + response.data
+          );
         }
-
       } catch (error) {
-        console.error('Error fetching entries:', error);
+        console.error("Error fetching entries:", error);
       }
     };
 
@@ -71,19 +50,19 @@ const EntriesTable: React.FC<EntriesTableProps> = ({ filter }) => {
       <table>
         <thead>
           <tr>
-            <th>Exercise</th>
-            <th>Date & Time</th>
             <th>Title</th>
+            <th>Exercise</th>
             <th>Burned Calories</th>
+            <th>Date & Time</th>
           </tr>
         </thead>
         <tbody>
           {entries.map((entry) => (
             <tr key={entry.Id}>
-              <td>{entry.exercise}</td>
-              <td>{entry.dateTime.toLocaleString()}</td>
               <td>{entry.title}</td>
               <td>{entry.burnedCalories}</td>
+              <td>{entry.exercise}</td>
+              <td>{entry.dateTime.toLocaleString()}</td>
             </tr>
           ))}
         </tbody>
