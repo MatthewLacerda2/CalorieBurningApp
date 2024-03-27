@@ -5,6 +5,8 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using CalorieBurningApp.Server.Models;
 using System.Security.Claims;
+using Server.Data;
+using Newtonsoft.Json;
 
 namespace CalorieBurningApp.Server.Controllers;
 
@@ -16,12 +18,14 @@ public class LoginController : ControllerBase
     private readonly SignInManager<User> _signInManager;
     private readonly UserManager<User> _userManager;
     private readonly IConfiguration _configuration;
+    private readonly ServerContext _context;
 
-    public LoginController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration)
+    public LoginController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, ServerContext context)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _configuration = configuration;
+        _context = context;
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -43,6 +47,9 @@ public class LoginController : ControllerBase
             var user = await _userManager.FindByNameAsync(model.UserName);
             var token = GenerateToken(user!);
 
+            user!.lastLogin = DateTime.Now;
+            _context.SaveChanges();
+
             return Ok(new { token });
         }
 
@@ -54,13 +61,17 @@ public class LoginController : ControllerBase
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF32.GetBytes(_configuration["Jwt:SecretKey"]!);
 
+        var UserDTOJson = JsonConvert.SerializeObject((UserDTO)user);
+
+        var claims = new List<Claim>{
+            new Claim(ClaimTypes.Name, user.UserName!),
+            new Claim(ClaimTypes.Email, user.Email!),
+            new Claim("UserDTO",UserDTOJson)
+        };
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.Name, user.UserName!),
-                new Claim(ClaimTypes.Email, user.Email!)
-            }),
+            Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddMinutes(20),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };

@@ -1,9 +1,7 @@
 using CalorieBurningApp.Server.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Server.Data;
 
 namespace CalorieBurningApp.Server.Controllers;
