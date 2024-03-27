@@ -8,6 +8,7 @@ using Server.Data;
 
 namespace CalorieBurningApp.Server.Controllers;
 
+[AllowAnonymous]
 [ApiController]
 [Route("api/v1/entries")]
 [Produces("application/json")]
@@ -39,7 +40,7 @@ public class EntriesController : ControllerBase{
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseEntry[]>))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [HttpGet]
-    public async Task<IActionResult> ReadEntries([FromBody] EExercise[]? exercises, DateTime? datetimeMin, DateTime? datetimeMax,
+    public async Task<IActionResult> ReadEntries(DateTime? datetimeMin, DateTime? datetimeMax,
                                                 string? userId, string? title, int? burnedCaloriesMin, int? burnedCaloriesMax,
                                                 int? offset, int limit, string? sort) {
 
@@ -48,11 +49,6 @@ public class EntriesController : ControllerBase{
         }
 
         var EntriesQuery = _context.ExerciseEntries.AsQueryable();
-
-        if (exercises != null && exercises.Length > 0) {
-            exercises = exercises.Distinct().ToArray();
-            EntriesQuery = EntriesQuery.Where(e => exercises.Contains(e.exercise));
-        }
 
         if (datetimeMin.HasValue) {
 
