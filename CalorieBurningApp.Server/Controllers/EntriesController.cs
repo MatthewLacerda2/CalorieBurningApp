@@ -169,6 +169,7 @@ public class EntriesController : ControllerBase
             return BadRequest("Calories must be a natural number greater than 0");
         }
 
+        userExists.burnedCalories += newEntry.burnedCalories;
         _context.ExerciseEntries.Add(newEntry);
         await _context.SaveChangesAsync();
 
