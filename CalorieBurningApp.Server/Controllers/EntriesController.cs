@@ -195,7 +195,10 @@ public class EntriesController : ControllerBase
             .FirstOrDefaultAsync();
 
         // If there is no last entry or it was not posted yesterday, return
-        if (lastEntry == null || lastEntry.dateTime.Date != DateTime.Now.AddDays(-1).Date)
+        var postedYesterday = lastEntry!.dateTime.Date == DateTime.Now.AddDays(-1).Date;
+        var postedToday = lastEntry.dateTime.Date != DateTime.Now.Date;
+        Console.WriteLine("postedToday: " + postedToday + ", postedYesterday:" + postedYesterday);
+        if (lastEntry == null || (postedYesterday && postedToday))
         {
             return;
         }

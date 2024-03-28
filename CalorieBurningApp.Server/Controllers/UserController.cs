@@ -199,7 +199,7 @@ public class UserController : ControllerBase
         existingUser.PhoneNumber = upUser.PhoneNumber;
 
         var userStreak = _context.Streaks.FirstOrDefault(s => s.UserId == existingUser.Id);
-        userStreak.FullName = upUser.FullName;
+        userStreak!.FullName = upUser.FullName;
         userStreak.UserName = upUser.UserName;
 
         await _context.SaveChangesAsync();
