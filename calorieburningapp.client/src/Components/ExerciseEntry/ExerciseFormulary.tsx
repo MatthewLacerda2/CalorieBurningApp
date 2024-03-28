@@ -36,6 +36,8 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
 
   const handleRequest = async () => {
     const userid: string | undefined = getUserFromToken()?.id;
+    console.log(userid);
+    console.log(exerciseEntry);
     try {
       const url = exerciseEntry
         ? `http://localhost:5071/api/v1/entries/?Id=${userid}`
@@ -107,6 +109,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
             onChange={handleInputChange}
           />
         </label>
+        <br />
         <button className="send-button" onClick={handleRequest}>
           Send
         </button>

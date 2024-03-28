@@ -31,7 +31,7 @@ const UserPage: React.FC = () => {
     burnedCaloriesMin: undefined,
     burnedCaloriesMax: undefined,
     offset: 0,
-    limit: 20,
+    limit: 10,
     sort: "datetime",
   };
 
@@ -94,20 +94,22 @@ const UserPage: React.FC = () => {
           children={<ExerciseFormulary />}
         />
       </div>
-      <div className="expandables-container">
-        {entries.map((entry) => (
-          <Expandable
-            key={entry.Id}
-            headline={entry.title!}
-            content={[
-              `Date & Time: ${entry.dateTime.toLocaleString()}`,
-              `Exercise: ${entry.exercise}`,
-              `Burned Calories: ${entry.burnedCalories}`,
-            ]}
-            children={[<Button text="X" onClick={funcao} />]}
-          />
-        ))}
-      </div>
+      <Card title="Latest entries">
+        <div className="expandables-container">
+          {entries.map((entry) => (
+            <Expandable
+              key={entry.Id}
+              headline={entry.title!}
+              content={[
+                `Date & Time: ${entry.dateTime.toLocaleString()}`,
+                `Exercise: ${entry.exercise}`,
+                `Burned Calories: ${entry.burnedCalories}`,
+              ]}
+              children={[<Button text="X" onClick={funcao} />]}
+            />
+          ))}
+        </div>
+      </Card>
     </div>
   );
 };
