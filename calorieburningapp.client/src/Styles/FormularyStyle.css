@@ -1,0 +1,33 @@
+.input-text {
+  background-color: var(--background-color);
+  height: 21px;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+  
+.input-text::placeholder {
+  color: #bbb;
+  font-size: 15px;
+}
+
+.send-button {
+  background-color: green;
+  font-size: 16px;
+  width: '16.7em';
+  height: '1.0em';
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.output-name {
+  display: flex;
+  align-items: center;
+  color: #333;
+  margin-bottom: 10px;
+}
