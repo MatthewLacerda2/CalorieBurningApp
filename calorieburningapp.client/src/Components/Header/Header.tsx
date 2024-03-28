@@ -3,6 +3,7 @@ import "./Header.css";
 import { Link } from "react-router-dom"; // Import Link component
 import { UserDTO } from "../../Data/UserDTO";
 import { getUserFromToken } from "../../Utils/getUserFromToken";
+import axios from "axios";
 
 const Header: React.FC = () => {
   const [user, setUser] = useState<UserDTO | null>(null);
@@ -18,8 +19,18 @@ const Header: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.clear();
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post("http://localhost:5071/api/v1/logout/");
+      console.log("Logout response:", response.data); // Log the response data
+      // Handle any other actions after successful logout if needed
+    } catch (error) {
+      console.error("Error logging out:", error);
+      // Handle error
+    } finally {
+      // Delete the token from local storage regardless of the response status
+      localStorage.removeItem("token");
+    }
   };
 
   if (loading) {
