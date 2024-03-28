@@ -79,7 +79,7 @@ public class EntriesController : ControllerBase
 
         if (!string.IsNullOrEmpty(title))
         {
-            EntriesQuery = EntriesQuery.OrderBy(e => e.title.Contains(title));
+            EntriesQuery = EntriesQuery.Where(e => e.title.Contains(title));
         }
 
         if (burnedCaloriesMin.HasValue)
@@ -88,6 +88,15 @@ public class EntriesController : ControllerBase
             {
                 return BadRequest("BurnedCaloriesMin must be a natural number equal or greater than 0");
             }
+
+            if (burnedCaloriesMax.HasValue)
+            {
+                if (burnedCaloriesMin > burnedCaloriesMax)
+                {
+                    return BadRequest("BurnedCaloriesMin must not be greater than BurnedCaloriesMax");
+                }
+            }
+
             EntriesQuery = EntriesQuery.Where(e => e.burnedCalories >= burnedCaloriesMin);
         }
 
@@ -97,6 +106,7 @@ public class EntriesController : ControllerBase
             {
                 return BadRequest("BurnedCaloriesMax must be a natural number equal or greater than 0");
             }
+
             EntriesQuery = EntriesQuery.Where(e => e.burnedCalories <= burnedCaloriesMax);
         }
 

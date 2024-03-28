@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from "react";
-import EntriesTable from "../../../Components/ManageEntriesPage/EntriesTable/EntriesTable";
-import { UserDTO } from "../../../Data/UserDTO";
+import { useEffect, useState } from "react";
 import { getUserFromToken } from "../../../Utils/getUserFromToken";
+import { UserDTO } from "../../../Data/UserDTO";
+import GetEntriesFilterFields from "../../../Components/ManageEntriesPage/EntriesFiltersFields/GETEntriesFilterFields";
+import EntriesTable from "../../../Components/ManageEntriesPage/EntriesTable/EntriesTable";
 
 const ManageEntriesPage: React.FC = () => {
   const [filter, setFilter] = useState<GETEntriesFilter | undefined>(undefined);
+
+  // Function to update the filter
+  const updateFilter = (newFilter: GETEntriesFilter) => {
+    setFilter(newFilter);
+  };
 
   useEffect(() => {
     const user: UserDTO | null = getUserFromToken();
@@ -30,9 +36,12 @@ const ManageEntriesPage: React.FC = () => {
     }
   }, []); // Empty dependency array to run the effect only once
 
+  console.log(filter);
+
   return (
     <div>
-      <h1>Manage Entries Page is here</h1>
+      <GetEntriesFilterFields onUpdateFilter={updateFilter} />
+      <h2>Your Exercises</h2>
       {filter && <EntriesTable filter={filter} />}
     </div>
   );

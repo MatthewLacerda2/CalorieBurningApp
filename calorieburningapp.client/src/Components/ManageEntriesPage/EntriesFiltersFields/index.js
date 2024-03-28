@@ -1,1 +1,1 @@
-export {default} from './EntriesFiltersFields.tsx';
+export {default} from './GETEntriesFilterFields';
