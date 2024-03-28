@@ -24,7 +24,6 @@ public class LeaderboardController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> ReadUsersCaloriesRanks(int offset, int limit)
     {
-
         if (offset < 0)
         {
             return BadRequest("Offset parameter must be a natural number greater than 0");
@@ -37,19 +36,21 @@ public class LeaderboardController : ControllerBase
 
         var UsersQuery = _context.Users.AsQueryable();
 
-        UsersQuery.OrderByDescending(u => u.burnedCalories);
+        // Sort the query by 'burnedCalories' in descending order
+        UsersQuery = UsersQuery.OrderByDescending(u => u.burnedCalories);
 
-        UsersQuery = UsersQuery.Skip(offset);
-        UsersQuery = UsersQuery.Take(limit);
+        // Apply pagination
+        UsersQuery = UsersQuery.Skip(offset).Take(limit);
 
         var resultQuery = await UsersQuery.ToArrayAsync();
         var resultsArray = resultQuery.Select(c => (UserDTO)c).ToArray();
 
         if (resultsArray.Length == 0)
         {
-            return NotFound("You skipped too many");
+            return NotFound("You skipped too many");    //Or your Database has no Users...
         }
 
         return Ok(resultsArray);
     }
+
 }
