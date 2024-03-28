@@ -42,7 +42,6 @@ public class EntriesController : ControllerBase
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseEntry[]>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [HttpGet]
     public async Task<IActionResult> ReadEntries(DateTime? datetimeMin, DateTime? datetimeMax,
                                                 string? userId, string? title, int? burnedCaloriesMin, int? burnedCaloriesMax,
@@ -152,11 +151,6 @@ public class EntriesController : ControllerBase
 
         var resultQuery = await EntriesQuery.ToArrayAsync();
         var resultsArray = resultQuery.ToArray();
-
-        if (resultsArray.Length == 0)
-        {
-            return NotFound();
-        }
 
         return Ok(resultsArray);
     }

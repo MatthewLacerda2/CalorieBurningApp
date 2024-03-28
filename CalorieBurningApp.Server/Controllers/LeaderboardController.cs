@@ -44,11 +44,6 @@ public class LeaderboardController : ControllerBase
         var resultQuery = await UsersQuery.ToArrayAsync();
         var resultsArray = resultQuery.Select(c => (UserDTO)c).ToArray();
 
-        if (resultsArray.Length == 0)
-        {
-            return NotFound("You skipped too many");    //Or your Database has no Users...
-        }
-
         return Ok(resultsArray);
     }
 
@@ -85,11 +80,6 @@ public class LeaderboardController : ControllerBase
 
         var resultQuery = await StreaksQuery.ToArrayAsync();
         var resultsArray = resultQuery.Select(c => c).ToArray();
-        Console.WriteLine("length" + resultsArray.Length);
-        if (resultsArray.Length == 0)
-        {
-            return NotFound("You skipped too many");    //Or your Database has no Users...
-        }
 
         return Ok(resultsArray);
     }
