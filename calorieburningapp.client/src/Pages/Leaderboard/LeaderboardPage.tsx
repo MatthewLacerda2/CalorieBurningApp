@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const LeaderboardPage: React.FC = () => {
   return (
@@ -6,6 +6,6 @@ const LeaderboardPage: React.FC = () => {
       <h1>Leaderboard Page is here</h1>
     </div>
   );
-}
+};
 
 export default LeaderboardPage;
