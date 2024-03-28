@@ -161,6 +161,7 @@ public class UserController : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
+    [Authorize]
     [HttpPatch]
     public async Task<IActionResult> UpdateUser([FromBody] UserDTO upUser)
     {
@@ -211,6 +212,7 @@ public class UserController : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id)
     {

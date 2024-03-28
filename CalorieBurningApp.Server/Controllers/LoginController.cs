@@ -84,7 +84,6 @@ public class LoginController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost("logout")]
-    [Authorize]
     public async Task<IActionResult> Logout()
     {
         try

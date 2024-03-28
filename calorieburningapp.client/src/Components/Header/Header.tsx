@@ -22,13 +22,11 @@ const Header: React.FC = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post("http://localhost:5071/api/v1/logout/");
-      console.log("Logout response:", response.data); // Log the response data
-      // Handle any other actions after successful logout if needed
+      console.log("Logout response:", response.data);
+      setUser(null);
     } catch (error) {
       console.error("Error logging out:", error);
-      // Handle error
     } finally {
-      // Delete the token from local storage regardless of the response status
       localStorage.removeItem("token");
     }
   };

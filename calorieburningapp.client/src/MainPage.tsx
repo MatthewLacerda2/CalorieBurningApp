@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Components/MainPage/MainPage.css";
-import Register from "./Components/MainPage/Register/Register";
+import RegisterFormulary from "./Components/MainPage/Register/RegisterFormulary";
 import LoginFormulary from "./Components/MainPage/Login/LoginFormulary";
 
 const MainPage: React.FC = () => {
@@ -22,7 +22,7 @@ const MainPage: React.FC = () => {
         {isLogin ? (
           <LoginFormulary toggleForm={toggleForm} />
         ) : (
-          <Register toggleForm={toggleForm} />
+          <RegisterFormulary toggleForm={toggleForm} />
         )}
       </div>
     </div>

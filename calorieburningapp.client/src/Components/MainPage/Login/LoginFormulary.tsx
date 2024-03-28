@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Card from "../../Card/Card";
 import "../../../Styles/FormularyStyle.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface LoginProps {
   toggleForm: () => void;
@@ -11,6 +12,7 @@ const LoginFormulary: React.FC<LoginProps> = ({ toggleForm }) => {
   const [UserName, setUserName] = useState("");
   const [Password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // Add useNavigate hook
 
   const handleLogin = async () => {
     try {
@@ -30,8 +32,7 @@ const LoginFormulary: React.FC<LoginProps> = ({ toggleForm }) => {
       if (response.status === 200) {
         const token = response.data.token;
         localStorage.setItem("token", token);
-        // Redirect to '/User' page upon successful login
-        history.pushState(response.data, "/User");
+        navigate("/User");
       } else {
         // Login failed, handle error scenario
         setError("Login failed. Please check your username and password.");

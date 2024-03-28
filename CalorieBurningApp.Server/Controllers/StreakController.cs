@@ -94,6 +94,7 @@ public class StreakController : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Streak))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
+    [Authorize]
     [HttpPatch]
     public async Task<IActionResult> LoseStreak(string userId)
     {
