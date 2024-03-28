@@ -1,4 +1,5 @@
 export interface Streak {
-    userId: string;
-    count: number;
+  UserId: string;
+  count: number;
+  record: number;
 }
