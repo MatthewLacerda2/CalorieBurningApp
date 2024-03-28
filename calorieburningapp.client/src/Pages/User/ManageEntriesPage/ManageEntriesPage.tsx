@@ -14,7 +14,7 @@ const ManageEntriesPage: React.FC = () => {
       const newFilter: GETEntriesFilter = {
         datetimeMin: undefined,
         datetimeMax: undefined,
-        userId: user.id, // Set userId from the deserialized UserDTO
+        userId: user.userId, // Set userId from the deserialized UserDTO
         title: undefined,
         burnedCaloriesMin: 0,
         burnedCaloriesMax: 2000,

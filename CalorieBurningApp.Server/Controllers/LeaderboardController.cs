@@ -37,7 +37,7 @@ public class LeaderboardController : ControllerBase
 
         var UsersQuery = _context.Users.AsQueryable();
 
-        UsersQuery.OrderBy(u => u.burnedCalories);
+        UsersQuery.OrderByDescending(u => u.burnedCalories);
 
         UsersQuery = UsersQuery.Skip(offset);
         UsersQuery = UsersQuery.Take(limit);

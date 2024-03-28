@@ -127,6 +127,11 @@ public class EntriesController : ControllerBase
                     EntriesQuery = EntriesQuery.OrderBy(c => c.burnedCalories);
                     break;
             }
+
+            if (sort.EndsWith("desc"))
+            {
+                EntriesQuery.Reverse();
+            }
         }
 
         if (offset.HasValue)
@@ -157,7 +162,6 @@ public class EntriesController : ControllerBase
         {
             return BadRequest("User does not exist!");
         }
-        Console.WriteLine("CHEGOOOOOOU");
 
         if (newEntry.dateTime > DateTime.Now)
         {
@@ -172,8 +176,6 @@ public class EntriesController : ControllerBase
         userExists.burnedCalories += newEntry.burnedCalories;
         _context.ExerciseEntries.Add(newEntry);
         await _context.SaveChangesAsync();
-
-        Console.WriteLine("Entry saved successfully");
 
         // Perform the streak check after saving the entry
         await CheckAndUpdateStreak(newEntry);
@@ -204,7 +206,6 @@ public class EntriesController : ControllerBase
         {
             streak.Increment();
             await _context.SaveChangesAsync();
-            Console.WriteLine("Streak updated successfully");
         }
     }
 
@@ -257,7 +258,7 @@ public class EntriesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEntry(string id)
     {
-        var entryExists = await _context.ExerciseEntries.FindAsync(id);
+        var entryExists = await _context.ExerciseEntries.FirstOrDefaultAsync(e => e.Id == id);
         if (entryExists == null)
         {
             return BadRequest("Entry does not Exist!");

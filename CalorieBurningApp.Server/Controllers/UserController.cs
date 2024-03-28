@@ -212,14 +212,7 @@ public class UserController : ControllerBase
             return BadRequest("User does not exist!");
         }
 
-        Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        Console.WriteLine("Ate aqui nos ajudou o Senhor");
-
         var result = await _userManager.DeleteAsync(user);
-
-        Console.WriteLine("Aqui nao chegou");
-
-
 
         if (result.Succeeded)
         {
