@@ -1,0 +1,16 @@
+.user-page {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .cards-container {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .expandables-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  

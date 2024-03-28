@@ -1,10 +1,8 @@
 import EExercise from './EExercise';
-import { User } from './User';
 
 export interface ExerciseEntry {
+    Id: string;
     userId: string;
-    user?: User;
-    id: string;
     exercise: EExercise;
     dateTime: Date;
     title?: string;

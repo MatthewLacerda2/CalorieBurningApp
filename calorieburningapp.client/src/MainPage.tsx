@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import './Components/MainPage/MainPage.css';
-import Register from './Components/MainPage/Register/Register';
-import Login from './Components/MainPage/Login/Login';
+import React, { useState } from "react";
+import "./Components/MainPage/MainPage.css";
+import RegisterFormulary from "./Components/MainPage/Register/RegisterFormulary";
+import LoginFormulary from "./Components/MainPage/Login/LoginFormulary";
 
 const MainPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -19,10 +19,14 @@ const MainPage: React.FC = () => {
         <p className="subtext">Compete!</p>
       </div>
       <div className="right-section">
-        {isLogin ? <Login toggleForm={toggleForm} /> : <Register toggleForm={toggleForm} />}
+        {isLogin ? (
+          <LoginFormulary toggleForm={toggleForm} />
+        ) : (
+          <RegisterFormulary toggleForm={toggleForm} />
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default MainPage;

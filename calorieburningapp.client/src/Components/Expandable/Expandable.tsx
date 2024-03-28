@@ -1,5 +1,5 @@
-import React, { ReactNode, useState } from 'react';
-import './Expandable.css';
+import React, { ReactNode, useState } from "react";
+import "./Expandable.css";
 
 interface ExpandableProps {
   headline: string;
@@ -7,7 +7,11 @@ interface ExpandableProps {
   children?: ReactNode[];
 }
 
-const Expandable: React.FC<ExpandableProps> = ({ headline, content, children }) => {
+const Expandable: React.FC<ExpandableProps> = ({
+  headline,
+  content,
+  children,
+}) => {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => {
@@ -17,7 +21,7 @@ const Expandable: React.FC<ExpandableProps> = ({ headline, content, children }) 
   return (
     <div className="expandable-container">
       <div className="expandable-header" onClick={toggleExpanded}>
-        <div className="arrow">{expanded ? '▼' : '▶'}</div>
+        <div className="arrow">{expanded ? "▼" : "▶"}</div>
         <h2>{headline}</h2>
       </div>
       {expanded && (
@@ -27,7 +31,7 @@ const Expandable: React.FC<ExpandableProps> = ({ headline, content, children }) 
           ))}
         </div>
       )}
-      {children}
+      {expanded && children}
     </div>
   );
 };
