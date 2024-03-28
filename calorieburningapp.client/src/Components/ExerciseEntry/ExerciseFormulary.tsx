@@ -3,6 +3,7 @@ import axios from "axios";
 import { ExerciseEntry } from "../../Data/ExerciseEntry";
 import EExercise from "../../Data/EExercise";
 import Card from "../Card/Card";
+import { getUserFromToken } from "../../Utils/getUserFromToken";
 
 interface ExerciseFormProps {
   exerciseEntry?: ExerciseEntry;
@@ -19,16 +20,27 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
   });
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      const user = getUserFromToken();
+      if (user) {
+        setExerciseData((prevData) => ({ ...prevData, userId: user.id }));
+      }
+    };
+
+    fetchUserData();
+
     if (exerciseEntry) {
       setExerciseData(exerciseEntry);
     }
   }, [exerciseEntry]);
 
   const handleRequest = async () => {
+    const userid: string | undefined = getUserFromToken()?.id;
+    console.log(userid);
     try {
       const url = exerciseEntry
-        ? `http://localhost:5071/api/v1/entries/${exerciseEntry.Id}`
-        : "http://localhost:5071/api/v1/entries";
+        ? `http://localhost:5071/api/v1/entries/?Id=${userid}`
+        : "http://localhost:5071/api/v1/entries/";
       const method = exerciseEntry ? "PUT" : "POST";
 
       await axios({
@@ -37,7 +49,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
         data: exerciseData,
       });
     } catch (error) {
-      console.error("Error occurred:", error);
+      console.error("Error occurred:xxxx", error);
     }
   };
 
@@ -47,6 +59,8 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
     const { name, value } = e.target;
     setExerciseData({ ...exerciseData, [name]: value });
   };
+
+  exerciseData.Id = getUserFromToken()!.id;
 
   return (
     <Card title={exerciseEntry ? "Edit Exercise Entry" : "Add Exercise Entry"}>
@@ -64,6 +78,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
             <option value={EExercise.cardio}>Cardio</option>
           </select>
         </label>
+        <br></br>
         <label>
           Date & Time:
           <input
@@ -73,6 +88,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
             onChange={handleInputChange}
           />
         </label>
+        <br></br>
         <label>
           Title:
           <input
@@ -82,6 +98,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
             onChange={handleInputChange}
           />
         </label>
+        <br></br>
         <label>
           Burned Calories:
           <input
