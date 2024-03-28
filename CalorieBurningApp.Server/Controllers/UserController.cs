@@ -141,7 +141,12 @@ public class UserController : ControllerBase
         User user = new User(newUser.FullName, newUser.birthday, newUser.UserName, newUser.Email, newUser.PhoneNumber);
         var result = await _userManager.CreateAsync(user, password);
 
-        Streak streak = new Streak(user.Id);
+        if (string.IsNullOrEmpty(user.FullName))
+        {
+            user.FullName = "";
+        }
+
+        Streak streak = new Streak(user.Id, user.UserName!, user.FullName);
         _context.Streaks.Add(streak);
 
         await _context.SaveChangesAsync();
@@ -192,6 +197,10 @@ public class UserController : ControllerBase
         existingUser.UserName = upUser.UserName;
         existingUser.Email = upUser.Email;
         existingUser.PhoneNumber = upUser.PhoneNumber;
+
+        var userStreak = _context.Streaks.FirstOrDefault(s => s.UserId == existingUser.Id);
+        userStreak.FullName = upUser.FullName;
+        userStreak.UserName = upUser.UserName;
 
         await _context.SaveChangesAsync();
 

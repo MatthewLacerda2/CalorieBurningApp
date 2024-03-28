@@ -55,6 +55,14 @@ namespace CalorieBurningApp.Server.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("count")
                         .HasColumnType("int");
 

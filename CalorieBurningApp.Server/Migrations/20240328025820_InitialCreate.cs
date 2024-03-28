@@ -101,6 +101,10 @@ namespace CalorieBurningApp.Server.Migrations
                 {
                     UserId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FullName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     count = table.Column<int>(type: "int", nullable: false),
                     record = table.Column<int>(type: "int", nullable: false)
                 },
