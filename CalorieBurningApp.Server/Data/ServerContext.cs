@@ -1,39 +1,36 @@
 using Microsoft.EntityFrameworkCore;
 using CalorieBurningApp.Server.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Server.Data;
-public class ServerContext : DbContext {
+public class ServerContext : IdentityDbContext<User>
+{
 
     public DbSet<ExerciseEntry> ExerciseEntries { get; set; }
-    public DbSet<User> Users { get; set; }
     public DbSet<Streak> Streaks { get; set; }
 
-    public ServerContext (DbContextOptions<ServerContext> options)
-        : base(options) {
+    public ServerContext(DbContextOptions<ServerContext> options)
+        : base(options)
+    {
 
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
 
-        // Configure primary keys
-        modelBuilder.Entity<ExerciseEntry>()
-            .HasKey(e => e.Id);
+        base.OnConfiguring(optionsBuilder);
 
-        modelBuilder.Entity<User>()
-            .HasKey(u => u.Id);
+        optionsBuilder.UseMySql(
+            "Server=localhost;Port=3306;Database=sqlcalories;User=lendacerda;Password=xpvista7810;",
+            new MariaDbServerVersion(new Version(10, 5, 11)));
+    }
 
-        modelBuilder.Entity<Streak>()
-            .HasKey(ucd => ucd.UserId);
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
 
-        // Define foreign key relationships
-        modelBuilder.Entity<ExerciseEntry>()
-            .HasOne(e => e.userId)
-            .WithMany()
-            .HasForeignKey(e => e.userId);
+        base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Streak>()
-            .HasOne(ucd => ucd.UserId)
-            .WithMany()
-            .HasForeignKey(ucd => ucd.UserId);
+        modelBuilder.Entity<Streak>(entity => { entity.ToTable("Streaks"); });
+        modelBuilder.Entity<ExerciseEntry>(entity => { entity.ToTable("ExerciseEntries"); });
     }
 }
