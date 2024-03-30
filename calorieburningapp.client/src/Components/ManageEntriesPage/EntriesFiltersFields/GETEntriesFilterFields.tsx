@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 interface Props {
-  onUpdateFilter: (filter: GETEntriesFilter) => void; // Function to update the filter
+  onUpdateFilter: (filter: GETEntriesFilter) => void;
 }
 
 const GetEntriesFilterFields: React.FC<Props> = ({ onUpdateFilter }) => {
@@ -10,12 +10,10 @@ const GetEntriesFilterFields: React.FC<Props> = ({ onUpdateFilter }) => {
     offset: 0,
   });
 
-  // Function to handle changes in the filter and trigger update
   const handleFilterChange = () => {
     onUpdateFilter(filter);
   };
 
-  // Function to handle typing in numeric fields
   const handleNumericChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     field: string
@@ -24,12 +22,10 @@ const GetEntriesFilterFields: React.FC<Props> = ({ onUpdateFilter }) => {
     if (!isNaN(newValue)) {
       setFilter({ ...filter, [field]: newValue });
     } else {
-      // If input is not a number, clear the field
       setFilter({ ...filter, [field]: undefined });
     }
   };
 
-  // Function to handle typing in date fields
   const handleDateChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     field: string
@@ -40,7 +36,7 @@ const GetEntriesFilterFields: React.FC<Props> = ({ onUpdateFilter }) => {
 
   useEffect(() => {
     handleFilterChange();
-  }, [filter]); // Trigger filter update whenever filter changes
+  }, [filter]);
 
   return (
     <div>

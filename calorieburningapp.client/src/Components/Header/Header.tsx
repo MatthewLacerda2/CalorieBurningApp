@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Header.css";
-import { Link } from "react-router-dom"; // Import Link component
+import { Link } from "react-router-dom";
 import { UserDTO } from "../../Data/UserDTO";
 import { getUserFromToken } from "../../Utils/getUserFromToken";
 import axios from "axios";
@@ -32,7 +32,7 @@ const Header: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Render loading indicator while fetching user data
+    return <div>Loading...</div>;
   }
 
   return (

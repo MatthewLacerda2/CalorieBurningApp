@@ -42,7 +42,6 @@ const UserPage: React.FC = () => {
 
         filter.userId = user?.id;
 
-        // Construct the query string based on the filter parameters
         let queryString = Object.keys(filter)
           .map((key) =>
             filter[key as keyof GETEntriesFilter] !== undefined
@@ -81,7 +80,7 @@ const UserPage: React.FC = () => {
     };
 
     fetchData();
-  }, []); // Empty de
+  }, []);
 
   return (
     <div className="user-page">
