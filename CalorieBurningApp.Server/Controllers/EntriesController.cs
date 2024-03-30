@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using CalorieBurningApp.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +12,6 @@ namespace CalorieBurningApp.Server.Controllers;
 [AllowAnonymous]
 [ApiController]
 [Route("api/v1/entries")]
-[Produces("application/json")]
 public class EntriesController : ControllerBase
 {
 
