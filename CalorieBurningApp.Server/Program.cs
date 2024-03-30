@@ -37,6 +37,21 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = verifiedIssuerSigningKey
     };
+})
+.AddFacebook(options =>
+{
+    options.AppId = "client";
+    options.AppSecret = "secret";
+})
+.AddGoogle(options =>
+{
+    options.ClientId = "client";
+    options.ClientSecret = "secret";
+})
+.AddMicrosoftAccount(options =>
+{
+    options.ClientId = "";
+    options.ClientSecret = "secret";
 });
 
 builder.Services.AddAuthorization();

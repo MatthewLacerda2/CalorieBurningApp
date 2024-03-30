@@ -8,6 +8,7 @@ using System.Security.Claims;
 using Server.Data;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 namespace CalorieBurningApp.Server.Controllers;
 
@@ -32,10 +33,10 @@ public class LoginController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    [ValidateAntiForgeryToken]
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginRequest model)
     {
-
         if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
         {
             return BadRequest("Invalid UserName or Password. Username: " + model.UserName + " , " + model.Password);
@@ -49,6 +50,10 @@ public class LoginController : ControllerBase
             var token = GenerateToken(user!);
 
             user!.lastLogin = DateTime.Now;
+
+            UserLoginInfo userLoginInfo = new UserLoginInfo("CaloriesBurningApp", "providerKey", "displayName");
+            await _userManager.AddLoginAsync(user, userLoginInfo);
+
             _context.SaveChanges();
 
             return Ok(new { token });
