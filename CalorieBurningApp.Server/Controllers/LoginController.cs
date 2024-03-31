@@ -38,7 +38,7 @@ public class LoginController : ControllerBase
 
         if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
         {
-            return BadRequest("Invalid UserName or Password. Username: " + model.UserName + " , " + model.Password);
+            return BadRequest("Invalid UserName or Password");
         }
 
         var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, false);
@@ -47,9 +47,6 @@ public class LoginController : ControllerBase
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
             var token = GenerateToken(user!);
-
-            user!.lastLogin = DateTime.Now;
-            _context.SaveChanges();
 
             return Ok(new { token });
         }
@@ -78,6 +75,10 @@ public class LoginController : ControllerBase
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        user!.lastLogin = DateTime.Now;
+        _context.SaveChanges();
+
         return tokenHandler.WriteToken(token);
     }
 
