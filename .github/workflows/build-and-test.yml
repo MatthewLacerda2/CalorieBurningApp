@@ -29,7 +29,6 @@ jobs:
 
       - name: Set up working directory
         run: cd CalorieBurningApp.Server
-        working directory: ./CalorieBurningApp.Server
 
       - name: Install dependencies
         run: dotnet restore
@@ -39,7 +38,6 @@ jobs:
 
       - name: Set up working directory for xUnit tests
         run: cd CalorieBurningApp.Tests
-        working-directory: ./CalorieBurningApp.Tests
 
       - name: Install dependencies for xUnit tests
         run: dotnet restore
