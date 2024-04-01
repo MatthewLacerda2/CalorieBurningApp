@@ -37,7 +37,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Set up working directory for xUnit tests
-        run: cd CalorieBurningApp.Tests
+        run: cd ../CalorieBurningApp.Server.Tests
 
       - name: Install dependencies for xUnit tests
         run: dotnet restore
