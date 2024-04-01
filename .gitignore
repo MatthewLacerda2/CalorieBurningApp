@@ -50,6 +50,7 @@ dist-ssr
 /frontend/node_modules/
 
 # .NET WebAPI specific rules
+/webapi/Migrations/
 /webapi/bin/
 /webapi/obj/
 
