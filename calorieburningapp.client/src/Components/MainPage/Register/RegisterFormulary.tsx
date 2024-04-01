@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Card from "../../Card/Card";
 import "../../../Styles/FormularyStyle.css";
-import axios from "axios";
 import { UserDTO } from "../../../Data/UserDTO";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface RegisterProps {
   toggleForm: () => void;
@@ -21,36 +22,56 @@ const RegisterFormulary: React.FC<RegisterProps> = ({ toggleForm }) => {
     phoneNumber: "",
   });
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleRegister = async () => {
     try {
+      console.log(userInfo);
       const response = await axios.post(
         `http://localhost:5071/api/v1/users?password=${password}`,
-        userInfo
+        userInfo,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
       console.log("Register response:", response.data);
-      // Handle success
-    } catch (error: any) {
-      console.error("Error registering user:", error);
-      if (error.response && error.response.status === 400) {
-        setErrorMessage(error.response.data);
-      } else {
-        setErrorMessage(
-          "An error occurred while registering. Please try again later."
-        );
+
+      if (response.status === 200) {
+        await handleLogin();
       }
+    } catch (error: any) {
+      console.error("XXXError registering user:", error);
+      console.error("XXXError registering user:", error.response);
+      console.error("XXXError registering user:", error.response.data);
     }
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    if (name === "password") {
-      setPassword(value);
-    } else {
-      setUserInfo({ ...userInfo, [name]: value });
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5071/api/v1/login",
+        {
+          userName: userInfo.userName,
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const token = response.data.token;
+        localStorage.setItem("token", token);
+        navigate("/User");
+      } else {
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.error("Error occurred while logging in:", error);
     }
   };
 
@@ -62,59 +83,47 @@ const RegisterFormulary: React.FC<RegisterProps> = ({ toggleForm }) => {
           style={{ width: "20em" }}
           type="text"
           placeholder="Full Name"
-          name="fullName"
           value={userInfo.fullName}
-          onChange={handleInputChange}
-        />
-        <input
-          className="input-text"
-          style={{ width: "20em" }}
-          type="date"
-          placeholder="Birthday"
-          name="birthday"
-          value={userInfo.birthday.toISOString().substring(0, 16)}
-          onChange={handleInputChange}
+          onChange={(e) =>
+            setUserInfo({ ...userInfo, fullName: e.target.value })
+          }
         />
         <input
           className="input-text"
           style={{ width: "20em" }}
           type="text"
-          placeholder="Username *"
-          name="userName"
+          placeholder="Username"
           value={userInfo.userName}
-          onChange={handleInputChange}
-          required
+          onChange={(e) =>
+            setUserInfo({ ...userInfo, userName: e.target.value })
+          }
         />
         <input
           className="input-text"
           style={{ width: "20em" }}
           type="email"
-          placeholder="Email *"
-          name="email"
+          placeholder="Email"
           value={userInfo.email}
-          onChange={handleInputChange}
-          required
+          onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
         />
         <input
           className="input-text"
           style={{ width: "20em" }}
           type="text"
           placeholder="Phone Number"
-          name="phoneNumber"
           value={userInfo.phoneNumber}
-          onChange={handleInputChange}
+          onChange={(e) =>
+            setUserInfo({ ...userInfo, phoneNumber: e.target.value })
+          }
         />
         <input
           className="input-text"
           style={{ width: "20em" }}
           type="password"
-          placeholder="Password *"
-          name="password"
+          placeholder="Password"
           value={password}
-          onChange={handleInputChange}
-          required
+          onChange={(e) => setPassword(e.target.value)}
         />
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
         <p></p>
         <button
           className="send-button"

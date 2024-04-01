@@ -71,8 +71,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
           <select
             name="exercise"
             value={exerciseData.exercise}
-            onChange={handleInputChange}
-          >
+            onChange={handleInputChange}>
             <option value={EExercise.walking}>Walking</option>
             <option value={EExercise.cycling}>Cycling</option>
             <option value={EExercise.swimming}>Swimming</option>

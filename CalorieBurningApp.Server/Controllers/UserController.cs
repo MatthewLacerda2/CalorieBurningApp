@@ -35,9 +35,7 @@ public class UserController : ControllerBase
             return NotFound();
         }
 
-        var response = JsonConvert.SerializeObject((UserDTO)user);
-
-        return Ok(response);
+        return Ok((UserDTO)user);
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDTO[]>))]
@@ -212,7 +210,6 @@ public class UserController : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
-    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id)
     {
