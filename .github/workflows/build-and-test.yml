@@ -3,7 +3,8 @@ name: build and test
 on:
   push:
   pull_request:
-    branches: [main]
+    types:
+      - ready_for_review
     paths:
       - "**.cs"
       - "**.csproj"
@@ -26,11 +27,22 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: Set up working directory
+        run: cd CalorieBurningApp.Server
+        working directory: ./CalorieBurningApp.Server
+
       - name: Install dependencies
         run: dotnet restore
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
+
+      - name: Set up working directory for xUnit tests
+        run: cd CalorieBurningApp.Tests
+        working-directory: ./CalorieBurningApp.Tests
+
+      - name: Install dependencies for xUnit tests
+        run: dotnet restore
 
       - name: Test
         run: dotnet test --no-restore --verbosity normal
