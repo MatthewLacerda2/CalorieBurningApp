@@ -35,10 +35,12 @@ public class UserDTO
     public string Id { get; set; }
 
     [JsonProperty]
+    [EmailAddress]
     [Required]
     public string Email { get; set; }
 
     [JsonProperty]
+    [Phone]
     [Required]
     [StringLength(15)]
     public string PhoneNumber { get; set; }
