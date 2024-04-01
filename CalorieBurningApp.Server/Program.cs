@@ -1,4 +1,5 @@
 using CalorieBurningApp.Server.Models;
+using CalorieBurningApp.Server.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
@@ -69,6 +70,27 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var context = services.GetRequiredService<ServerContext>();
+        var userManager = services.GetRequiredService<UserManager<User>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        var adminSeeder = new AdminSeed(context, userManager, roleManager);
+        await adminSeeder.SeedUsersAsync();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("An error occurred while seeding the database.");
+        Console.WriteLine(ex.Message);
+    }
+}
 
 app.UseCors("AllowAnyOrigin");
 
