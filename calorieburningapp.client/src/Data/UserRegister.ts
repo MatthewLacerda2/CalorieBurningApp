@@ -1,4 +1,5 @@
 export interface UserRegister {
+  Id: string;
   fullName: string;
   birthday: Date;
   userName: string;
