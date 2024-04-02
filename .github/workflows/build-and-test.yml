@@ -18,7 +18,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [ubuntu-latest]
 
     steps:
       - uses: actions/checkout@v3
@@ -28,13 +28,13 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Install dependencies
-        run: dotnet restore ..\..\CalorieBurningApp.Server\CalorieBurningApp.Server.csproj
+        run: dotnet restore ../../CalorieBurningApp.Server/CalorieBurningApp.Server.csproj
 
       - name: Build
-        run: dotnet build ..\..\CalorieBurningApp.Server\CalorieBurningApp.Server.csproj
+        run: dotnet build ../../CalorieBurningApp.Server/CalorieBurningApp.Server.csproj
 
       - name: Install dependencies for xUnit tests
-        run: dotnet restore ..\..\CalorieBurningApp.Server.Tests\CalorieBurningApp.Server.Tests.csproj
+        run: dotnet restore ../../CalorieBurningApp.Server.Tests/CalorieBurningApp.Server.Tests.csproj
 
       - name: Test
-        run: dotnet test ..\..\CalorieBurningApp.Server.Tests\CalorieBurningApp.Server.Tests.csproj
+        run: dotnet test ../../CalorieBurningApp.Server.Tests/CalorieBurningApp.Server.Tests.csproj
