@@ -1,4 +1,4 @@
-name: build and test
+name: build-and-test
 
 on:
   push:
@@ -13,12 +13,9 @@ env:
   DOTNET_VERSION: "8.x"
 
 jobs:
-  build-and-test:
-    name: build-and-test-${{matrix.os}}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
+  build-and-test-dotnet:
+    name: build-and-test-dotnet
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -43,9 +40,8 @@ jobs:
         working-directory: CalorieBurningApp.Server.Tests
         run: dotnet test
 
-jobs:
-  build:
-
+  build-react-app:
+    name: build-react-app
     runs-on: ubuntu-latest
 
     steps:
@@ -54,7 +50,7 @@ jobs:
         working-directory: calorieBurningApp.client
         uses: actions/setup-node@v4
         with:
-          node-version: '>=16.x'
+          node-version: ">=16.x"
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
