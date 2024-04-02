@@ -27,18 +27,34 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Install dependencies
+      - name: Install Dotnet dependencies
         working-directory: CalorieBurningApp.Server
         run: dotnet restore
 
-      - name: Build
+      - name: Dotnet Build
         working-directory: CalorieBurningApp.Server
         run: dotnet build
 
-      - name: Install dependencies for xUnit tests
+      - name: Install xUnit dependencies
         working-directory: CalorieBurningApp.Server.Tests
         run: dotnet restore
 
-      - name: Test
+      - name: Dotnet test
         working-directory: CalorieBurningApp.Server.Tests
         run: dotnet test
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        working-directory: calorieBurningApp.client
+        uses: actions/setup-node@v4
+        with:
+          node-version: '>=16.x'
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
