@@ -7,7 +7,6 @@ using CalorieBurningApp.Server.Models;
 using System.Security.Claims;
 using Server.Data;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Authorization;
 
 namespace CalorieBurningApp.Server.Controllers;
 
@@ -46,7 +45,10 @@ public class LoginController : ControllerBase
         if (result.Succeeded)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
-            var token = GenerateToken(user!);
+
+            var roles = await _userManager.GetRolesAsync(user!);
+
+            var token = GenerateToken(user!, roles.ToArray());
 
             return Ok(new { token });
         }
@@ -54,7 +56,7 @@ public class LoginController : ControllerBase
         return Unauthorized();
     }
 
-    private string GenerateToken(User user)
+    private string GenerateToken(User user, string[] roles)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF32.GetBytes(_configuration["Jwt:SecretKey"]!);
@@ -64,8 +66,14 @@ public class LoginController : ControllerBase
         var claims = new List<Claim>{
             new Claim(ClaimTypes.Name, user.UserName!),
             new Claim(ClaimTypes.Email, user.Email!),
+            new Claim(ClaimTypes.Role, user.Email!),
             new Claim("UserDTO",UserDTOJson)
         };
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
