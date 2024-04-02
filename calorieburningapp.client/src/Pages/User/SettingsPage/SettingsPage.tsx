@@ -1,22 +1,20 @@
 import React from "react";
-import { UserRegister } from "../../../Data/UserRegister";
 import { UserSiteSettings } from "../../../Data/UserSiteSettings";
 import Card from "../../../Components/Card/Card";
 import UserDataFormulary from "../../../Components/SettingsPage/UserDataFormulary/UserDataFormulary";
 import UserSiteSettingsFormulary from "../../../Components/SettingsPage/UserSettingsFormulary/UserSettingsFormulary";
+import { UserDTO } from "../../../Data/UserDTO";
+import { getUserFromToken } from "../../../Utils/getUserFromToken";
 
-interface SettingsPageProps {
-  userRegister: UserRegister;
-  userSiteSettings: UserSiteSettings;
-}
+const SettingsPage: React.FC = () => {
+  const userRegister: UserDTO = getUserFromToken();
+  const userSiteSettings: UserSiteSettings = {
+    font_scale: 17,
+    background_color: "black",
+  };
 
-const SettingsPage: React.FC<SettingsPageProps> = ({
-  userRegister,
-  userSiteSettings,
-}) => {
-  const handleUserDataSave = async (updatedUser: UserRegister) => {
+  const handleUserDataSave = async (updatedUser: UserDTO) => {
     try {
-      // Send PATCH request to update user data
       const response = await fetch("http://localhost:5071/api/v1/users", {
         method: "PATCH",
         headers: {
@@ -28,7 +26,6 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
         const responseData = await response.json();
         throw new Error(responseData);
       }
-      // Handle success
       console.log("User data updated successfully");
     } catch (error: any) {
       console.error("Error updating user data:", error.message);
@@ -37,9 +34,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({
 
   const handleUserSiteSettingsSave = (updatedSettings: UserSiteSettings) => {
     try {
-      // Save user site settings to local storage
       localStorage.setItem("usersitesettings", JSON.stringify(updatedSettings));
-      // Handle success
       console.log("User site settings saved successfully");
     } catch (error: any) {
       console.error("Error saving user site settings:", error.message);

@@ -1,7 +1,19 @@
 import { jwtDecode } from "jwt-decode";
 import { UserDTO } from "../Data/UserDTO";
 
-export function getUserFromToken(): UserDTO | null {
+export function getUserFromToken(): UserDTO {
+  const emptyDTO: UserDTO = {
+    fullName: "",
+    birthday: new Date(),
+    createdDate: new Date(),
+    lastLogin: new Date(),
+    burnedCalories: 0,
+    userName: "",
+    id: "",
+    email: "",
+    phoneNumber: "",
+  };
+
   const token: string | null = localStorage.getItem("token");
   if (token !== null) {
     try {
@@ -15,10 +27,10 @@ export function getUserFromToken(): UserDTO | null {
       return user;
     } catch (error) {
       console.error("Error decoding or deserializing JWT token:", error);
-      return null;
+      return emptyDTO;
     }
   } else {
     console.error("Token is null or not found in local storage.");
-    return null;
+    return emptyDTO;
   }
 }

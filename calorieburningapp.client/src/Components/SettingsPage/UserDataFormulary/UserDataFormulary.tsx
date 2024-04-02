@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { UserRegister } from "../../../Data/UserRegister";
+import { UserDTO } from "../../../Data/UserDTO";
 
 interface UserDataFormularyProps {
-  userRegister: UserRegister;
-  onSave: (updatedUser: UserRegister) => void;
+  userRegister: UserDTO;
+  onSave: (updatedUser: UserDTO) => void;
 }
 
 const UserDataFormulary: React.FC<UserDataFormularyProps> = ({
   userRegister,
   onSave,
 }) => {
-  const [updatedUser, setUpdatedUser] = useState<UserRegister>(userRegister);
+  const [updatedUser, setUpdatedUser] = useState<UserDTO>(userRegister);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
