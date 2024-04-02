@@ -38,3 +38,16 @@ jobs:
       - name: Dotnet test
         working-directory: CalorieBurningApp.Server.Tests
         run: dotnet test
+
+      - name: Check job status and update pull request
+        if: ${{ failure() }}
+        run: |
+          echo "::error::One or more jobs failed. Please fix the issues before marking this pull request as ready for review."
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Content-Type: application/json" \
+               -d '{"body": "One or more jobs failed. Please fix the issues before marking this pull request as ready for review."}' \
+               "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+          curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Content-Type: application/json" \
+               -d '{"draft": true}' \
+               "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}"
