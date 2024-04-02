@@ -28,17 +28,17 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Install dependencies
-        working-directory: ../../CalorieBurningApp.Server
+        working-directory: ./CalorieBurningApp/CalorieBurningApp.Server
         run: dotnet restore ./CalorieBurningApp.Server.csproj
 
       - name: Build
-        working-directory: ../../CalorieBurningApp.Server
+        working-directory: ./CalorieBurningApp/CalorieBurningApp.Server
         run: dotnet build ./CalorieBurningApp.Server.csproj
 
       - name: Install dependencies for xUnit tests
-        working-directory: ../../CalorieBurningApp.Server.Tests
+        working-directory: ./CalorieBurningApp/CalorieBurningApp.Server.Tests
         run: dotnet restore ./CalorieBurningApp.Server.Tests.csproj
 
       - name: Test
-        working-directory: ../../CalorieBurningApp.Server.Tests
+        working-directory: ./CalorieBurningApp/CalorieBurningApp.Server.Tests
         run: dotnet test ./CalorieBurningApp.Server.Tests.csproj
