@@ -7,7 +7,6 @@ using CalorieBurningApp.Server.Models;
 using System.Security.Claims;
 using Server.Data;
 using Newtonsoft.Json;
-using System.Net;
 
 namespace CalorieBurningApp.Server.Controllers;
 
