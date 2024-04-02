@@ -22,19 +22,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Install dependencies
-        run: dotnet restore ..\..\CalorieBurningApp.Server\CalorieBurningApp.Server.csproj
+        working-directory: ..\..\CalorieBurningApp.Server\
+        run: dotnet restore CalorieBurningApp.Server.csproj
 
       - name: Build
-        run: dotnet build ..\..\CalorieBurningApp.Server\CalorieBurningApp.Server.csproj
+        working-directory: ..\..\CalorieBurningApp.Server\
+        run: dotnet build CalorieBurningApp.Server.csproj
 
       - name: Install dependencies for xUnit tests
-        run: dotnet restore ..\..\CalorieBurningApp.Server.Tests\CalorieBurningApp.Server.Tests.csproj
+        working-directory: ..\..\CalorieBurningApp.Server.Tests
+        run: dotnet restore CalorieBurningApp.Server.Tests.csproj
 
       - name: Test
-        run: dotnet test ..\..\CalorieBurningApp.Server.Tests\CalorieBurningApp.Server.Tests.csproj
+        working-directory: ..\..\CalorieBurningApp.Server.Tests
+        run: dotnet test CalorieBurningApp.Server.Tests.csproj
