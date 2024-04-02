@@ -33,9 +33,11 @@ Then, get the container online
 
 docker run -d -p 3306:3306 --name mysql_container -e MYSQL_ROOT_PASSWORD=xpvista7810 -e MYSQL_DATABASE=sqlcalories -e MYSQL_USER=lendacerda -e MYSQL_PASSWORD=xpvista7810 mysql
 
-Now, clone this repository, enter it's root folder and update the database
+Since this is a Challenge project and not meant for Business use, Migrations files aren't included. But once you run the Initial migration, the database will be seeded
+After cloning this repository, enter it's root folder, run the initial migration and update (or initiate, for this matter) the database
 
 cd .\CalorieBurningApp.Server\
+dotnet ef migrations add InitialCreate
 dotnet ef database update
 
 Now you can run the project with `dotnet watch run`and burn some calories!
