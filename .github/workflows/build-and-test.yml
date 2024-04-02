@@ -29,16 +29,16 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./CalorieBurningApp/CalorieBurningApp.Server
-        run: dotnet restore ./CalorieBurningApp.Server.csproj
+        run: dotnet restore
 
       - name: Build
         working-directory: ./CalorieBurningApp/CalorieBurningApp.Server
-        run: dotnet build ./CalorieBurningApp.Server.csproj
+        run: dotnet build
 
       - name: Install dependencies for xUnit tests
         working-directory: ./CalorieBurningApp/CalorieBurningApp.Server.Tests
-        run: dotnet restore ./CalorieBurningApp.Server.Tests.csproj
+        run: dotnet restore
 
       - name: Test
         working-directory: ./CalorieBurningApp/CalorieBurningApp.Server.Tests
-        run: dotnet test ./CalorieBurningApp.Server.Tests.csproj
+        run: dotnet test
