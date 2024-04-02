@@ -92,6 +92,7 @@ public class LoginController : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpPatch]
     [Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> PasswordChange([FromBody] UserRegister userRegister)
