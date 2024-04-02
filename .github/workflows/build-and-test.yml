@@ -39,6 +39,14 @@ jobs:
         working-directory: CalorieBurningApp.Server.Tests
         run: dotnet test
 
+      - name: Npm (React) dependencies
+        working-directory: calorieBurningApp.client
+        run: npm ci
+
+      - name: Npm (React) Build
+        working-directory: calorieBurningApp.client
+        run: npm run build
+
       - name: Check job status and update pull request
         if: ${{ failure() }}
         run: |
