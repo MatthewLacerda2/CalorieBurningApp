@@ -39,16 +39,17 @@ const UserDataFormulary: React.FC<UserDataFormularyProps> = ({
           onChange={handleInputChange}
         />
       </div>
-      <div>
-        <label htmlFor="birthday">Birthday:</label>
-        <input
-          type="date"
-          id="birthday"
-          name="birthday"
-          value={updatedUser.birthday.toISOString().slice(0, 10)} // Format to YYYY-MM-DD
-          onChange={handleInputChange}
-        />
-      </div>
+      {/*
+        <div>
+          <label htmlFor="birthday">Birthday:</label>
+          <input
+            type="date"
+            id="birthday"
+            name="birthday"
+            value={updatedUser.birthday.toISOString().slice(0, 10)} // Format to YYYY-MM-DD
+            onChange={handleInputChange}
+          />
+        </div>*/}
       <div>
         <label htmlFor="userName">Username:</label>
         <input

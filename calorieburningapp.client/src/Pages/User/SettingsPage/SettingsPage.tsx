@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { UserSiteSettings } from "../../../Data/UserSiteSettings";
 import Card from "../../../Components/Card/Card";
 import UserDataFormulary from "../../../Components/SettingsPage/UserDataFormulary/UserDataFormulary";
@@ -8,22 +8,33 @@ import { getUserFromToken } from "../../../Utils/getUserFromToken";
 import axios from "axios";
 
 const SettingsPage: React.FC = () => {
+  const [error, setError] = useState(null);
+
   const userRegister: UserDTO = getUserFromToken();
   const userSiteSettings: UserSiteSettings = {
-    font_scale: 17,
+    font_scale: 1.0,
     background_color: "black",
   };
 
   const handleUserDataSave = async (updatedUser: UserDTO) => {
     try {
-      await axios.patch("http://localhost:5071/api/v1/users", updatedUser, {
-        headers: {
-          "Content-Type": "application/json",
+      await axios.patch(
+        "http://localhost:5071/api/v1/users",
+        {
+          ...updatedUser,
+          currentPassword: "",
+          newPassword: "",
         },
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log("User data updated successfully");
     } catch (error: any) {
       console.error("Error updating user data:", error.message);
+      setError(error.message);
     }
   };
 
@@ -43,6 +54,7 @@ const SettingsPage: React.FC = () => {
           userRegister={userRegister}
           onSave={handleUserDataSave}
         />
+        {error !== null && <div>{error}</div>}
       </Card>
       <Card title="Site Settings">
         <UserSiteSettingsFormulary
