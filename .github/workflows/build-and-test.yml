@@ -41,7 +41,8 @@ jobs:
 
       - name: Npm (React) dependencies
         working-directory: calorieburningapp.client
-        run: npm ci
+        run: |
+          npm install
 
       - name: Npm (React) Build
         working-directory: calorieburningapp.client
