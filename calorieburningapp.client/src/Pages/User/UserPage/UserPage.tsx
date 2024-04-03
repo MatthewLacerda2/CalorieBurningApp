@@ -31,7 +31,7 @@ const UserPage: React.FC = () => {
     burnedCaloriesMax: undefined,
     offset: 0,
     limit: 10,
-    sort: "datetime",
+    sort: "datetimeDesc",
   };
 
   useEffect(() => {
@@ -41,7 +41,6 @@ const UserPage: React.FC = () => {
 
         filter.userId = user?.Id;
 
-        // Construct the query string based on the filter parameters
         let queryString = Object.keys(filter)
           .map((key) =>
             filter[key as keyof GETEntriesFilter] !== undefined
@@ -80,7 +79,7 @@ const UserPage: React.FC = () => {
     };
 
     fetchData();
-  }, []); // Empty de
+  }, []);
 
   return (
     <div className="user-page">

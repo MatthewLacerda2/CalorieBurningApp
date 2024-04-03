@@ -23,8 +23,8 @@ const ManageEntriesPage: React.FC = () => {
         burnedCaloriesMin: 0,
         burnedCaloriesMax: 2000,
         offset: 0,
-        limit: 10,
-        sort: "datetime",
+        limit: 20,
+        sort: "datetimeDesc",
       };
 
       setFilter(newFilter);
@@ -32,8 +32,6 @@ const ManageEntriesPage: React.FC = () => {
       console.error("Token is null or not found in local storage.");
     }
   }, []);
-
-  console.log(filter);
 
   return (
     <div>
