@@ -12,10 +12,14 @@ const EntriesTable: React.FC<EntriesTableProps> = ({ filter }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let url = "http://localhost:5071/api/v1/entries";
+        let url = "http://localhost:5071/api/v1/entries?";
         if (filter.userId) {
-          url += `/${filter.userId}`;
+          url += `${filter.userId}`;
         }
+
+        url += `&limit=${filter.limit}`;
+
+        console.log(url);
 
         const response = await axios.get(url, { params: filter });
 

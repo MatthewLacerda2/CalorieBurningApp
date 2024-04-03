@@ -1,11 +1,11 @@
 export interface UserDTO {
-  fullName: string;
+  FullName: string;
   birthday: Date;
   createdDate: Date;
   lastLogin: Date;
   burnedCalories: number;
-  userName: string;
-  id: string;
-  email: string;
-  phoneNumber: string;
+  UserName: string;
+  Id: string;
+  Email: string;
+  PhoneNumber: string;
 }

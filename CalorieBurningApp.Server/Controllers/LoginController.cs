@@ -7,6 +7,7 @@ using CalorieBurningApp.Server.Models;
 using System.Security.Claims;
 using Server.Data;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CalorieBurningApp.Server.Controllers;
 
@@ -29,8 +30,8 @@ public class LoginController : ControllerBase
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginRequest model)
     {
@@ -92,6 +93,33 @@ public class LoginController : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpPatch]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PasswordChange([FromBody] UserRegister userRegister)
+    {
+
+        User user = _userManager.FindByEmailAsync(userRegister.Email).Result!;
+        if (user == null)
+        {
+            return BadRequest("There is no User with this email");
+        }
+
+        if (StringChecker.IsPasswordStrong(userRegister.newPassword))
+        {
+            return BadRequest("Password must have an Upper-Case, a Lower-Case, a number and a special character");
+        }
+
+        await _userManager.ChangePasswordAsync(user, userRegister.currentPassword, userRegister.newPassword);
+
+        await _context.SaveChangesAsync();
+
+        return Ok("Password change successfully");
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [Authorize]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {

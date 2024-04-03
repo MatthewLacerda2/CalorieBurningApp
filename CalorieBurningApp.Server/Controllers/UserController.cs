@@ -101,50 +101,51 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] UserDTO newUser, string password)
+    public async Task<IActionResult> CreateUser([FromBody] UserRegister newUserRegister)
     {
 
-        if (string.IsNullOrEmpty(newUser.UserName))
+        if (string.IsNullOrEmpty(newUserRegister.UserName))
         {
             return BadRequest("Empty UserName");
         }
-        else if (_context.Users.Any(c => c.UserName == newUser.UserName))
+        else if (_context.Users.Any(c => c.UserName == newUserRegister.UserName))
         {
             return BadRequest("UserName already registered!");
         }
 
-        if (string.IsNullOrEmpty(newUser.Email))
+        if (string.IsNullOrEmpty(newUserRegister.Email))
         {
             return BadRequest("Empty Email");
         }
-        else if (_context.Users.Any(c => c.Email == newUser.Email))
+        else if (_context.Users.Any(c => c.Email == newUserRegister.Email))
         {
             return BadRequest("Email already registered!");
         }
 
-        if (!string.IsNullOrEmpty(newUser.PhoneNumber) && _context.Users.Any(c => c.PhoneNumber == newUser.PhoneNumber))
+        if (!string.IsNullOrEmpty(newUserRegister.PhoneNumber) && _context.Users.Any(c => c.PhoneNumber == newUserRegister.PhoneNumber))
         {
             return BadRequest("PhoneNumber already registered!");
         }
 
-        if (!StringChecker.IsPasswordStrong(password))
+        if (!StringChecker.IsPasswordStrong(newUserRegister.newPassword))
         {
             return BadRequest("Password must have an Upper-Case, a Lower-Case, a number and a special character");
         }
+
+        User newUser = (User)newUserRegister;
 
         newUser.createdDate = DateTime.Now;
         newUser.lastLogin = DateTime.Now;
         newUser.burnedCalories = 0;
 
-        User user = new User(newUser.FullName, newUser.birthday, newUser.UserName, newUser.Email, newUser.PhoneNumber);
-        var result = await _userManager.CreateAsync(user, password);
+        var result = await _userManager.CreateAsync(newUser, newUserRegister.newPassword);
 
-        if (string.IsNullOrEmpty(user.FullName))
+        if (string.IsNullOrEmpty(newUser.FullName))
         {
-            user.FullName = "";
+            newUser.FullName = "";
         }
 
-        Streak streak = new Streak(user.Id, user.UserName!, user.FullName);
+        Streak streak = new Streak(newUser.Id, newUser.UserName!, newUser.FullName);
         _context.Streaks.Add(streak);
 
         await _context.SaveChangesAsync();
@@ -154,14 +155,14 @@ public class UserController : ControllerBase
             return StatusCode(500, "Internal Server Error: Registrar Usuario Unsuccessful\n\n" + result.Errors);
         }
 
-        return CreatedAtAction(nameof(CreateUser), (UserDTO)user);
+        return CreatedAtAction(nameof(CreateUser), (UserDTO)newUser);
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [Authorize]
     [HttpPatch]
-    public async Task<IActionResult> UpdateUser([FromBody] UserDTO upUser)
+    public async Task<IActionResult> UpdateUser([FromBody] UserDTO upUser, string currentPassword, string newPassword)
     {
 
         var existingUser = _context.Users.Find(upUser.Id);
@@ -200,6 +201,11 @@ public class UserController : ControllerBase
         var userStreak = _context.Streaks.FirstOrDefault(s => s.UserId == existingUser.Id);
         userStreak!.FullName = upUser.FullName;
         userStreak.UserName = upUser.UserName;
+
+        if (!string.IsNullOrEmpty(currentPassword) && !string.IsNullOrEmpty(newPassword))
+        {
+            await _userManager.ChangePasswordAsync(existingUser, currentPassword, newPassword);
+        }
 
         await _context.SaveChangesAsync();
 

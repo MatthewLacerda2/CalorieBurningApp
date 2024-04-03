@@ -6,6 +6,7 @@ import NotFoundPage from "./NotFoundPage";
 import UserPage from "./Pages/User/UserPage/UserPage";
 import ManageEntriesPage from "./Pages/User/ManageEntriesPage/ManageEntriesPage";
 import LeaderboardPage from "./Pages/Leaderboard/LeaderboardPage";
+import SettingsPage from "./Pages/User/SettingsPage/SettingsPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/User">
           <Route index element={<UserPage />} />
           <Route path="ManageEntries" element={<ManageEntriesPage />} />
+          <Route path="Settings" element={<SettingsPage />} />
         </Route>
         <Route path="/Leaderboard" element={<LeaderboardPage />} />
       </Routes>
