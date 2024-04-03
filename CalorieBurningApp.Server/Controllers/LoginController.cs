@@ -35,7 +35,6 @@ public class LoginController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginRequest model)
     {
-
         if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
         {
             return BadRequest("Invalid UserName or Password. Username: " + model.UserName + " , " + model.Password);
@@ -52,6 +51,10 @@ public class LoginController : ControllerBase
             var token = GenerateToken(user!, roles.ToArray());
 
             user!.lastLogin = DateTime.Now;
+
+            UserLoginInfo userLoginInfo = new UserLoginInfo("CaloriesBurningApp", "providerKey", "displayName");
+            await _userManager.AddLoginAsync(user, userLoginInfo);
+
             _context.SaveChanges();
 
             return Ok(new { token });
