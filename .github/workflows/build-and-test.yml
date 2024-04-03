@@ -14,7 +14,7 @@ env:
 jobs:
   build-and-test-dotnet:
     name: build-and-test-dotnet
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -42,7 +42,7 @@ jobs:
       - name: Npm (React) dependencies
         working-directory: calorieburningapp.client
         run: |
-          npm install
+          npm ci
 
       - name: Npm (React) Build
         working-directory: calorieburningapp.client
