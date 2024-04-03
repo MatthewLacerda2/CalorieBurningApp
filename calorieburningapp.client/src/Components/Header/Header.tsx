@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Header.css";
-import { Link } from "react-router-dom"; // Import Link component
+import { Link } from "react-router-dom";
 import { UserDTO } from "../../Data/UserDTO";
 import { getUserFromToken } from "../../Utils/getUserFromToken";
 import axios from "axios";
 
 const Header: React.FC = () => {
-  const [user, setUser] = useState<UserDTO | null>(null);
+  const [user, setUser] = useState<UserDTO>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,9 +21,10 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post("http://localhost:5071/api/v1/logout/");
+      const response = await axios.post(
+        "http://localhost:5071/api/v1/login/logout/"
+      );
       console.log("Logout response:", response.data);
-      setUser(null);
     } catch (error) {
       console.error("Error logging out:", error);
     } finally {
@@ -32,7 +33,7 @@ const Header: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Render loading indicator while fetching user data
+    return <div>Loading...</div>;
   }
 
   return (

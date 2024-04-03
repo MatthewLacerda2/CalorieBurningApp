@@ -5,6 +5,7 @@ import UserDataFormulary from "../../../Components/SettingsPage/UserDataFormular
 import UserSiteSettingsFormulary from "../../../Components/SettingsPage/UserSettingsFormulary/UserSettingsFormulary";
 import { UserDTO } from "../../../Data/UserDTO";
 import { getUserFromToken } from "../../../Utils/getUserFromToken";
+import axios from "axios";
 
 const SettingsPage: React.FC = () => {
   const userRegister: UserDTO = getUserFromToken();
@@ -15,17 +16,11 @@ const SettingsPage: React.FC = () => {
 
   const handleUserDataSave = async (updatedUser: UserDTO) => {
     try {
-      const response = await fetch("http://localhost:5071/api/v1/users", {
-        method: "PATCH",
+      await axios.patch("http://localhost:5071/api/v1/users", updatedUser, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedUser),
       });
-      if (!response.ok) {
-        const responseData = await response.json();
-        throw new Error(responseData);
-      }
       console.log("User data updated successfully");
     } catch (error: any) {
       console.error("Error updating user data:", error.message);

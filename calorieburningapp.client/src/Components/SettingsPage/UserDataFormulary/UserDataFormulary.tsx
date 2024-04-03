@@ -39,7 +39,46 @@ const UserDataFormulary: React.FC<UserDataFormularyProps> = ({
           onChange={handleInputChange}
         />
       </div>
-      {/* Add other input fields for birthday, username, email, and phoneNumber */}
+      <div>
+        <label htmlFor="birthday">Birthday:</label>
+        <input
+          type="date"
+          id="birthday"
+          name="birthday"
+          value={updatedUser.birthday.toISOString().slice(0, 10)} // Format to YYYY-MM-DD
+          onChange={handleInputChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="userName">Username:</label>
+        <input
+          type="text"
+          id="userName"
+          name="userName"
+          value={updatedUser.userName}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={updatedUser.email}
+          onChange={handleInputChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="phoneNumber">Phone Number:</label>
+        <input
+          type="tel"
+          id="phoneNumber"
+          name="phoneNumber"
+          value={updatedUser.phoneNumber}
+          onChange={handleInputChange}
+        />
+      </div>
       <button type="submit">Save</button>
     </form>
   );

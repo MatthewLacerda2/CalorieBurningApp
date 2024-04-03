@@ -12,7 +12,6 @@ import { ExerciseEntry } from "../../../Data/ExerciseEntry";
 
 const UserPage: React.FC = () => {
   const [entries, setEntries] = useState<ExerciseEntry[]>([]);
-
   const funcao = () => {
     console.log("debug");
   };
@@ -21,7 +20,7 @@ const UserPage: React.FC = () => {
   const streakInfo: string = `Current Streak: 0 Longest Streak: 0`;
   const totalCals: string = `Total calories Burnt: 0`;
 
-  const user: UserDTO | null = getUserFromToken();
+  const user: UserDTO = getUserFromToken();
 
   const filter: GETEntriesFilter = {
     datetimeMin: undefined,
