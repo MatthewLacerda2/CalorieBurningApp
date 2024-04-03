@@ -12,7 +12,6 @@ import { ExerciseEntry } from "../../../Data/ExerciseEntry";
 
 const UserPage: React.FC = () => {
   const [entries, setEntries] = useState<ExerciseEntry[]>([]);
-
   const funcao = () => {
     console.log("debug");
   };
@@ -21,18 +20,18 @@ const UserPage: React.FC = () => {
   const streakInfo: string = `Current Streak: 0 Longest Streak: 0`;
   const totalCals: string = `Total calories Burnt: 0`;
 
-  const user: UserDTO | null = getUserFromToken();
+  const user: UserDTO = getUserFromToken();
 
   const filter: GETEntriesFilter = {
     datetimeMin: undefined,
     datetimeMax: undefined,
-    userId: user!.id,
+    userId: user!.Id,
     title: undefined,
     burnedCaloriesMin: undefined,
     burnedCaloriesMax: undefined,
     offset: 0,
     limit: 10,
-    sort: "datetime",
+    sort: "datetimeDesc",
   };
 
   useEffect(() => {
@@ -40,9 +39,8 @@ const UserPage: React.FC = () => {
       try {
         let url = "http://localhost:5071/api/v1/entries/";
 
-        filter.userId = user?.id;
+        filter.userId = user?.Id;
 
-        // Construct the query string based on the filter parameters
         let queryString = Object.keys(filter)
           .map((key) =>
             filter[key as keyof GETEntriesFilter] !== undefined
@@ -81,7 +79,7 @@ const UserPage: React.FC = () => {
     };
 
     fetchData();
-  }, []); // Empty de
+  }, []);
 
   return (
     <div className="user-page">

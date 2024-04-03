@@ -23,7 +23,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
     const fetchUserData = async () => {
       const user = getUserFromToken();
       if (user) {
-        setExerciseData((prevData) => ({ ...prevData, userId: user.id }));
+        setExerciseData((prevData) => ({ ...prevData, userId: user.Id }));
       }
     };
 
@@ -35,7 +35,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
   }, [exerciseEntry]);
 
   const handleRequest = async () => {
-    const userid: string | undefined = getUserFromToken()?.id;
+    const userid: string | undefined = getUserFromToken()?.Id;
     console.log(userid);
     console.log(exerciseEntry);
     try {
@@ -61,7 +61,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
     setExerciseData({ ...exerciseData, [name]: value });
   };
 
-  exerciseData.Id = getUserFromToken()!.id;
+  exerciseData.Id = getUserFromToken()!.Id;
 
   return (
     <Card title={exerciseEntry ? "Edit Exercise Entry" : "Add Exercise Entry"}>

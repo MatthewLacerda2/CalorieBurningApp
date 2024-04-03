@@ -65,15 +65,13 @@ const LoginFormulary: React.FC<LoginProps> = ({ toggleForm }) => {
         <button
           className="send-button"
           style={{ width: "285px", fontSize: "20px" }}
-          onClick={handleLogin}
-        >
+          onClick={handleLogin}>
           Login
         </button>
         <button
           className="send-button"
           style={{ backgroundColor: "blue" }}
-          onClick={toggleForm}
-        >
+          onClick={toggleForm}>
           Register
         </button>
         {error && <div className="error-message">{error}</div>}

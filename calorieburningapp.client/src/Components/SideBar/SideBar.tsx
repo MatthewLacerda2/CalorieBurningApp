@@ -14,7 +14,7 @@ const SideBar = () => {
       </Link>
       <div className="line" />
       <br />
-      <Link to="/Settings" className="bar-item">
+      <Link to="/User/Settings" className="bar-item">
         Settings
       </Link>
       <div className="line" />
