@@ -124,16 +124,16 @@ public class EntriesController : ControllerBase
             switch (sort)
             {
                 case "exercise":
-                    EntriesQuery = EntriesQuery.OrderBy(c => c.exercise);
+                    EntriesQuery = EntriesQuery.OrderBy(c => c.exercise).ThenBy(c => c.dateTime);
                     break;
                 case "datetime":
-                    EntriesQuery = EntriesQuery.OrderBy(c => c.dateTime);
+                    EntriesQuery = EntriesQuery.OrderBy(c => c.dateTime).ThenBy(c => c.dateTime);
                     break;
                 case "title":
-                    EntriesQuery = EntriesQuery.OrderBy(c => c.title);
+                    EntriesQuery = EntriesQuery.OrderBy(c => c.title).ThenBy(c => c.dateTime);
                     break;
                 case "burnedcalories":
-                    EntriesQuery = EntriesQuery.OrderBy(c => c.burnedCalories);
+                    EntriesQuery = EntriesQuery.OrderBy(c => c.burnedCalories).ThenBy(c => c.dateTime);
                     break;
             }
 

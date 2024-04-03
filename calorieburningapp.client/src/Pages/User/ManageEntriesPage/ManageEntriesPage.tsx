@@ -12,22 +12,22 @@ const ManageEntriesPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const user: UserDTO | null = getUserFromToken();
+    const user: UserDTO = getUserFromToken();
 
     if (user !== null) {
       const newFilter: GETEntriesFilter = {
         datetimeMin: undefined,
         datetimeMax: undefined,
-        userId: user.id,
+        userId: user.Id,
         title: undefined,
         burnedCaloriesMin: 0,
         burnedCaloriesMax: 2000,
         offset: 0,
-        limit: 10,
-        sort: "datetime",
+        limit: 20,
+        sort: "datetimeDesc",
       };
       console.log("aqui meu irmao, \n" + user + "\naora meu preto");
-      console.log("aqui meu irmao2, \n" + user.id + "\naora meu preto2");
+      console.log("aqui meu irmao2, \n" + user.Id + "\naora meu preto2");
 
       setFilter(newFilter);
     } else {

@@ -6,7 +6,7 @@ import { getUserFromToken } from "../../Utils/getUserFromToken";
 import axios from "axios";
 
 const Header: React.FC = () => {
-  const [user, setUser] = useState<UserDTO | null>(null);
+  const [user, setUser] = useState<UserDTO>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,9 +21,10 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post("http://localhost:5071/api/v1/logout/");
+      const response = await axios.post(
+        "http://localhost:5071/api/v1/login/logout/"
+      );
       console.log("Logout response:", response.data);
-      setUser(null);
     } catch (error) {
       console.error("Error logging out:", error);
     } finally {
@@ -37,11 +38,13 @@ const Header: React.FC = () => {
 
   return (
     <div className="main-header">
-      <div className="logo">{user ? user.userName : "FURNACE"}</div>
+      <div className="logo">FURNACE</div>
       {user && (
-        <div style={{ textAlign: "left" }}>
-          <span>Welcome {user.userName}</span>
-          <Link to="/" onClick={handleLogout}>
+        <div className="user-info">
+          <span>
+            <b>{user.UserName}</b>
+          </span>
+          <Link to="/" onClick={handleLogout} className="logout-button">
             <button>Logout</button>
           </Link>
         </div>

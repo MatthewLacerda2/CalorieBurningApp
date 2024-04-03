@@ -49,10 +49,10 @@ const LeaderboardPage: React.FC = () => {
         </thead>
         <tbody>
           {burnedCalories.map((user, index) => (
-            <tr key={user.id}>
+            <tr key={user.Id}>
               <td>#{index + 1}</td>
-              <td>{user.userName}</td>
-              <td>{user.fullName}</td>
+              <td>{user.UserName}</td>
+              <td>{user.FullName}</td>
               <td>{user.burnedCalories}</td>
             </tr>
           ))}
