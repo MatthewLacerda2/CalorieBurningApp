@@ -35,7 +35,7 @@ const UserDataFormulary: React.FC<UserDataFormularyProps> = ({
           type="text"
           id="fullName"
           name="fullName"
-          value={updatedUser.fullName}
+          value={updatedUser.FullName}
           onChange={handleInputChange}
         />
       </div>
@@ -56,7 +56,7 @@ const UserDataFormulary: React.FC<UserDataFormularyProps> = ({
           type="text"
           id="userName"
           name="userName"
-          value={updatedUser.userName}
+          value={updatedUser.UserName}
           onChange={handleInputChange}
         />
       </div>
@@ -66,7 +66,7 @@ const UserDataFormulary: React.FC<UserDataFormularyProps> = ({
           type="email"
           id="email"
           name="email"
-          value={updatedUser.email}
+          value={updatedUser.Email}
           onChange={handleInputChange}
         />
       </div>
@@ -76,7 +76,7 @@ const UserDataFormulary: React.FC<UserDataFormularyProps> = ({
           type="tel"
           id="phoneNumber"
           name="phoneNumber"
-          value={updatedUser.phoneNumber}
+          value={updatedUser.PhoneNumber}
           onChange={handleInputChange}
         />
       </div>

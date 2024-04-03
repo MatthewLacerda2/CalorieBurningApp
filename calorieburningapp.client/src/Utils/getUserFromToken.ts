@@ -3,15 +3,15 @@ import { UserDTO } from "../Data/UserDTO";
 
 export function getEmptyDTO(): UserDTO {
   return {
-    fullName: "",
+    FullName: "",
     birthday: new Date(),
     createdDate: new Date(),
     lastLogin: new Date(),
     burnedCalories: 0,
-    userName: "",
-    id: "",
-    email: "",
-    phoneNumber: "",
+    UserName: "",
+    Id: "",
+    Email: "",
+    PhoneNumber: "",
   };
 }
 

@@ -18,7 +18,7 @@ const ManageEntriesPage: React.FC = () => {
       const newFilter: GETEntriesFilter = {
         datetimeMin: undefined,
         datetimeMax: undefined,
-        userId: user.id,
+        userId: user.Id,
         title: undefined,
         burnedCaloriesMin: 0,
         burnedCaloriesMax: 2000,

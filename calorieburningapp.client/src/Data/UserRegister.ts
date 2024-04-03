@@ -1,9 +1,10 @@
 export interface UserRegister {
   Id: string;
-  fullName: string;
+  FullName: string;
   birthday: Date;
-  userName: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
+  UserName: string;
+  Email: string;
+  PhoneNumber: string;
+  currentPassword: string;
+  newPassword: string;
 }

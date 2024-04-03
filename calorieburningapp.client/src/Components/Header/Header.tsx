@@ -38,10 +38,10 @@ const Header: React.FC = () => {
 
   return (
     <div className="main-header">
-      <div className="logo">{user ? user.userName : "FURNACE"}</div>
+      <div className="logo">{user ? user.UserName : "FURNACE"}</div>
       {user && (
         <div style={{ textAlign: "left" }}>
-          <span>Welcome {user.userName}</span>
+          <span>Welcome {user.UserName}</span>
           <Link to="/" onClick={handleLogout}>
             <button>Logout</button>
           </Link>

@@ -25,7 +25,7 @@ const UserPage: React.FC = () => {
   const filter: GETEntriesFilter = {
     datetimeMin: undefined,
     datetimeMax: undefined,
-    userId: user!.id,
+    userId: user!.Id,
     title: undefined,
     burnedCaloriesMin: undefined,
     burnedCaloriesMax: undefined,
@@ -39,7 +39,7 @@ const UserPage: React.FC = () => {
       try {
         let url = "http://localhost:5071/api/v1/entries/";
 
-        filter.userId = user?.id;
+        filter.userId = user?.Id;
 
         // Construct the query string based on the filter parameters
         let queryString = Object.keys(filter)
