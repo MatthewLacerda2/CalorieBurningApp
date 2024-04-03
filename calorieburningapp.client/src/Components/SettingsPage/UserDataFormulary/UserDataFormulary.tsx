@@ -33,8 +33,8 @@ const UserDataFormulary: React.FC<UserDataFormularyProps> = ({
         <label htmlFor="fullName">Full Name:</label>
         <input
           type="text"
-          id="fullName"
-          name="fullName"
+          id="FullName"
+          name="FullName"
           value={updatedUser.FullName}
           onChange={handleInputChange}
         />
@@ -54,8 +54,8 @@ const UserDataFormulary: React.FC<UserDataFormularyProps> = ({
         <label htmlFor="userName">Username:</label>
         <input
           type="text"
-          id="userName"
-          name="userName"
+          id="UserName"
+          name="UserName"
           value={updatedUser.UserName}
           onChange={handleInputChange}
         />
@@ -64,8 +64,8 @@ const UserDataFormulary: React.FC<UserDataFormularyProps> = ({
         <label htmlFor="email">Email:</label>
         <input
           type="email"
-          id="email"
-          name="email"
+          id="Email"
+          name="Email"
           value={updatedUser.Email}
           onChange={handleInputChange}
         />
@@ -74,8 +74,8 @@ const UserDataFormulary: React.FC<UserDataFormularyProps> = ({
         <label htmlFor="phoneNumber">Phone Number:</label>
         <input
           type="tel"
-          id="phoneNumber"
-          name="phoneNumber"
+          id="PhoneNumber"
+          name="PhoneNumber"
           value={updatedUser.PhoneNumber}
           onChange={handleInputChange}
         />
