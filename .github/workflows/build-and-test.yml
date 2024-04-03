@@ -40,11 +40,11 @@ jobs:
         run: dotnet test
 
       - name: Npm (React) dependencies
-        working-directory: calorieBurningApp.client
+        working-directory: calorieburningapp.client
         run: npm ci
 
       - name: Npm (React) Build
-        working-directory: calorieBurningApp.client
+        working-directory: calorieburningapp.client
         run: npm run build
 
       - name: Check job status and update pull request
