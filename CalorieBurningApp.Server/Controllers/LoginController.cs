@@ -51,6 +51,10 @@ public class LoginController : ControllerBase
 
             var token = GenerateToken(user!, roles.ToArray());
 
+            user!.lastLogin = DateTime.Now;
+
+            _context.SaveChanges();
+
             return Ok(new { token });
         }
 
@@ -95,7 +99,6 @@ public class LoginController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPatch]
     [Authorize]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> PasswordChange([FromBody] UserRegister userRegister)
     {
 

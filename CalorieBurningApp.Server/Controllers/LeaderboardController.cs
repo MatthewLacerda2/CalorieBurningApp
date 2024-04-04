@@ -51,7 +51,7 @@ public class LeaderboardController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(string))]
     [HttpGet]
     [Route("streaks")]
-    public async Task<IActionResult> ReadStreaksRanks(string sort, int offset, int limit)
+    public async Task<IActionResult> ReadStreaksRanks(int offset, int limit, string sort)
     {
         if (offset < 0)
         {

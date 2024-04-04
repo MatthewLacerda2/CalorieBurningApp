@@ -162,7 +162,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [Authorize]
     [HttpPatch]
-    public async Task<IActionResult> UpdateUser([FromBody] UserDTO upUser, string currentPassword, string newPassword)
+    public async Task<IActionResult> UpdateUser([FromBody] UserDTO upUser, string? currentPassword, string? newPassword)
     {
 
         var existingUser = _context.Users.Find(upUser.Id);
