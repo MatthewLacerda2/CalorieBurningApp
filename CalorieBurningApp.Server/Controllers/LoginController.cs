@@ -38,7 +38,7 @@ public class LoginController : ControllerBase
 
         if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
         {
-            return BadRequest("Invalid UserName or Password. Username: " + model.UserName + " , " + model.Password);
+            return BadRequest("Invalid UserName or Password");
         }
 
         var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, false);
@@ -52,6 +52,7 @@ public class LoginController : ControllerBase
             var token = GenerateToken(user!, roles.ToArray());
 
             user!.lastLogin = DateTime.Now;
+
             _context.SaveChanges();
 
             return Ok(new { token });
@@ -87,14 +88,16 @@ public class LoginController : ControllerBase
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        user!.lastLogin = DateTime.Now;
+        _context.SaveChanges();
+
         return tokenHandler.WriteToken(token);
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPatch]
-    [Authorize]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> PasswordChange([FromBody] UserRegister userRegister)
     {
 

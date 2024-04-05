@@ -32,9 +32,7 @@ public class StreakController : ControllerBase
             return NotFound();
         }
 
-        var response = JsonConvert.SerializeObject(streak);
-
-        return Ok(response);
+        return Ok(streak);
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Streak[]>))]

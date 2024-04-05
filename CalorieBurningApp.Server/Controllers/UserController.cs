@@ -35,9 +35,7 @@ public class UserController : ControllerBase
             return NotFound();
         }
 
-        var response = JsonConvert.SerializeObject((UserDTO)user);
-
-        return Ok(response);
+        return Ok((UserDTO)user);
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserDTO[]>))]
@@ -164,7 +162,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
     [Authorize]
     [HttpPatch]
-    public async Task<IActionResult> UpdateUser([FromBody] UserDTO upUser, string currentPassword, string newPassword)
+    public async Task<IActionResult> UpdateUser([FromBody] UserDTO upUser, string? currentPassword, string? newPassword)
     {
 
         var existingUser = _context.Users.Find(upUser.Id);
@@ -218,7 +216,6 @@ public class UserController : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
-    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id)
     {

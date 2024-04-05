@@ -36,9 +36,7 @@ public class EntriesController : ControllerBase
             return NotFound();
         }
 
-        var response = JsonConvert.SerializeObject(entry);
-
-        return Ok(response);
+        return Ok(entry);
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseEntry[]>))]
@@ -260,15 +258,15 @@ public class EntriesController : ControllerBase
         return Ok(entryExists);
     }
 
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEntry(string id)
+    [HttpDelete("{userId}/{id}")]
+    public async Task<IActionResult> DeleteEntry(string userId, string id)
     {
-        var entryExists = await _context.ExerciseEntries.FirstOrDefaultAsync(e => e.Id == id);
+        var entryExists = await _context.ExerciseEntries
+            .FirstOrDefaultAsync(e => e.userId == userId && e.Id == id);
+
         if (entryExists == null)
         {
-            return BadRequest("Entry does not Exist!");
+            return BadRequest("Entry does not exist!");
         }
 
         _context.ExerciseEntries.Remove(entryExists);
@@ -276,4 +274,5 @@ public class EntriesController : ControllerBase
 
         return NoContent();
     }
+
 }

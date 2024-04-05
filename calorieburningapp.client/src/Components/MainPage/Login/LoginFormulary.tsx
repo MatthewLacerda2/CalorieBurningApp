@@ -12,7 +12,7 @@ const LoginFormulary: React.FC<LoginProps> = ({ toggleForm }) => {
   const [UserName, setUserName] = useState("");
   const [Password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // Add useNavigate hook
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -34,7 +34,6 @@ const LoginFormulary: React.FC<LoginProps> = ({ toggleForm }) => {
         localStorage.setItem("token", token);
         navigate("/User");
       } else {
-        // Login failed, handle error scenario
         setError("Login failed. Please check your username and password.");
       }
     } catch (error) {
@@ -76,7 +75,6 @@ const LoginFormulary: React.FC<LoginProps> = ({ toggleForm }) => {
         </button>
         {error && <div className="error-message">{error}</div>}
       </div>
-      {/* Removed Link button */}
     </Card>
   );
 };
