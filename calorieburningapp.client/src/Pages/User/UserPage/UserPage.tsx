@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from "react";
-import SideBar from "../../../Components/SideBar/SideBar";
-import Expandable from "../../../Components/Expandable/Expandable";
-import Card from "../../../Components/Card/Card";
-import ExerciseFormulary from "../../../Components/ExerciseEntry/ExerciseFormulary";
-import Button from "../../../Components/Button/Button";
 import "./UserPage.css";
 import { UserDTO } from "../../../Data/UserDTO";
 import { getUserFromToken } from "../../../Utils/getUserFromToken";
 import axios from "axios";
 import { ExerciseEntry } from "../../../Data/ExerciseEntry";
+import { Streak } from "../../../Data/Streak";
+import SideBar from "../../../Components/SideBar/SideBar";
+import ExerciseFormulary from "../../../Components/ExerciseEntry/ExerciseFormulary";
+import Expandable from "../../../Components/Expandable/Expandable";
+import Card from "../../../Components/Card/Card";
 
 const UserPage: React.FC = () => {
   const [entries, setEntries] = useState<ExerciseEntry[]>([]);
-  const funcao = () => {
-    console.log("debug");
-  };
-
-  const calWarning: string = `Reach 300cal to mark a streak for the day!`;
-  const streakInfo: string = `Current Streak: 0 Longest Streak: 0`;
-  const totalCals: string = `Total calories Burnt: 0`;
+  const [currStreak, setCurStreak] = useState(0);
+  const [recordStreak, setRecordStreak] = useState(0);
 
   const user: UserDTO = getUserFromToken();
+
+  const calWarning: string = `Reach 300cal to mark a streak for the day!`;
+  const streakInfo: string = `Current Streak: ${currStreak} | Record Streak: ${recordStreak}`;
+  const totalCals: string = `Total calories Burnt: ${user.burnedCalories}`;
 
   const filter: GETEntriesFilter = {
     datetimeMin: undefined,
@@ -33,6 +32,26 @@ const UserPage: React.FC = () => {
     limit: 10,
     sort: "datetimeDesc",
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let url = `http://localhost:5071/api/v1/streaks/${user?.Id}`;
+        console.log(`http://localhost:5071/api/v1/streaks/${user?.Id}`);
+
+        const response = await axios.get(url);
+
+        const userStreak: Streak = response.data;
+
+        setCurStreak(userStreak.count);
+        setRecordStreak(userStreak.record);
+      } catch (error) {
+        console.error("Error fetching streak:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,7 +122,6 @@ const UserPage: React.FC = () => {
                 `Exercise: ${entry.exercise}`,
                 `Burned Calories: ${entry.burnedCalories}`,
               ]}
-              children={[<Button text="X" onClick={funcao} />]}
             />
           ))}
         </div>
