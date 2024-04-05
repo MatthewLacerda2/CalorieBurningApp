@@ -19,13 +19,13 @@ const LeaderboardPage: React.FC = () => {
         const currentResponse = await axios.get(
           "http://localhost:5071/api/v1/leaderboard/streaks/?sort=count&offset=0&limit=10"
         );
-        console.log("Current Streaks Response:", currentResponse.data); // Log the response data
+        console.log("Current Streaks Response:", currentResponse.data);
         setCurrentStreaks(currentResponse.data);
 
         const recordResponse = await axios.get(
           "http://localhost:5071/api/v1/leaderboard/streaks/?sort=record&offset=0&limit=10"
         );
-        console.log("Record Streaks Response:", recordResponse.data); // Log the response data
+        console.log("Record Streaks Response:", recordResponse.data);
         setRecordStreaks(recordResponse.data);
       } catch (error) {
         console.error("Error fetching leaderboard data:", error);
