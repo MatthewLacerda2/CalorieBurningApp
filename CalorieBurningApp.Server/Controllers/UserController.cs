@@ -160,9 +160,8 @@ public class UserController : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestObjectResult))]
-    [Authorize]
-    [HttpPatch]
-    public async Task<IActionResult> UpdateUser([FromBody] UserDTO upUser, string? currentPassword, string? newPassword)
+    [HttpPatch("{upUser}")]
+    public async Task<IActionResult> UpdateUser([FromBody] UserDTO upUser)
     {
 
         var existingUser = _context.Users.Find(upUser.Id);
@@ -201,11 +200,6 @@ public class UserController : ControllerBase
         var userStreak = _context.Streaks.FirstOrDefault(s => s.UserId == existingUser.Id);
         userStreak!.FullName = upUser.FullName;
         userStreak.UserName = upUser.UserName;
-
-        if (!string.IsNullOrEmpty(currentPassword) && !string.IsNullOrEmpty(newPassword))
-        {
-            await _userManager.ChangePasswordAsync(existingUser, currentPassword, newPassword);
-        }
 
         await _context.SaveChangesAsync();
 
