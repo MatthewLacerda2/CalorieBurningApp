@@ -6,7 +6,7 @@ interface Props {
 
 const GetEntriesFilterFields: React.FC<Props> = ({ onUpdateFilter }) => {
   const [filter, setFilter] = useState<GETEntriesFilter>({
-    limit: 20,
+    limit: 10,
     offset: 0,
   });
 

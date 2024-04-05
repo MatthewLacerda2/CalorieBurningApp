@@ -19,6 +19,9 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
     burnedCalories: 0,
   });
 
+  exerciseData.userId = getUserFromToken()!.Id;
+  console.log(exerciseData.dateTime);
+
   useEffect(() => {
     const fetchUserData = async () => {
       const user = getUserFromToken();
@@ -33,6 +36,14 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
       setExerciseData(exerciseEntry);
     }
   }, [exerciseEntry]);
+
+  const handleDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: string
+  ) => {
+    const newValue = new Date(event.target.value).toISOString();
+    setExerciseData((prevData) => ({ ...prevData, [field]: newValue }));
+  };
 
   const handleRequest = async () => {
     const userid: string | undefined = getUserFromToken()?.Id;
@@ -61,8 +72,6 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
     setExerciseData({ ...exerciseData, [name]: value });
   };
 
-  exerciseData.Id = getUserFromToken()!.Id;
-
   return (
     <Card title={exerciseEntry ? "Edit Exercise Entry" : "Add Exercise Entry"}>
       <div className="exercise-form">
@@ -84,8 +93,8 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
           <input
             name="dateTime"
             type="datetime-local"
-            value={exerciseData.dateTime.toISOString().substring(0, 16)}
-            onChange={handleInputChange}
+            value={exerciseData.dateTime?.toISOString().slice(0, -16) ?? ""}
+            onChange={(e) => handleDateChange(e, "dateTime")}
           />
         </label>
         <br></br>

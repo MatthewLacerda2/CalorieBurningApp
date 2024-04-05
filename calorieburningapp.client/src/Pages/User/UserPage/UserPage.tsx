@@ -45,8 +45,6 @@ const UserPage: React.FC = () => {
       try {
         let url = `http://localhost:5071/api/v1/entries?userId=${user.Id}&limit=10`;
 
-        console.log("URL FILTER ID: " + url);
-
         const response = await axios.get(url);
 
         if (Array.isArray(response.data)) {
