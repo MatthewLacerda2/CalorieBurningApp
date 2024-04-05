@@ -4,6 +4,7 @@ import { ExerciseEntry } from "../../Data/ExerciseEntry";
 import EExercise from "../../Data/EExercise";
 import Card from "../Card/Card";
 import { getUserFromToken } from "../../Utils/getUserFromToken";
+import "../../Styles/FormularyStyle.css";
 
 interface ExerciseFormProps {
   exerciseEntry?: ExerciseEntry;
@@ -14,10 +15,13 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
     userId: "",
     Id: "",
     exercise: EExercise.walking,
-    dateTime: new Date(),
+    dateTime: new Date(2020, 1, 1, 13, 0, 0, 0),
     title: "",
     burnedCalories: 0,
   });
+
+  exerciseData.userId = getUserFromToken()!.Id;
+  console.log(exerciseData.dateTime);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -33,6 +37,14 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
       setExerciseData(exerciseEntry);
     }
   }, [exerciseEntry]);
+
+  const handleDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: string
+  ) => {
+    const newValue = new Date(event.target.value).toISOString();
+    setExerciseData((prevData) => ({ ...prevData, [field]: newValue }));
+  };
 
   const handleRequest = async () => {
     const userid: string | undefined = getUserFromToken()?.Id;
@@ -61,8 +73,6 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
     setExerciseData({ ...exerciseData, [name]: value });
   };
 
-  exerciseData.Id = getUserFromToken()!.Id;
-
   return (
     <Card title={exerciseEntry ? "Edit Exercise Entry" : "Add Exercise Entry"}>
       <div className="exercise-form">
@@ -82,16 +92,18 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
         <label>
           Date & Time:
           <input
+            className="input-text"
             name="dateTime"
             type="datetime-local"
-            value={exerciseData.dateTime.toISOString().substring(0, 16)}
-            onChange={handleInputChange}
+            value={exerciseData.dateTime?.toISOString().slice(0, -16) ?? ""}
+            onChange={(e) => handleDateChange(e, "dateTime")}
           />
         </label>
         <br></br>
         <label>
           Title:
           <input
+            className="input-text"
             name="title"
             type="text"
             value={exerciseData.title}
@@ -102,6 +114,8 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
         <label>
           Burned Calories:
           <input
+            className="input-text"
+            style={{ height: "15px" }}
             name="burnedCalories"
             type="number"
             value={exerciseData.burnedCalories}

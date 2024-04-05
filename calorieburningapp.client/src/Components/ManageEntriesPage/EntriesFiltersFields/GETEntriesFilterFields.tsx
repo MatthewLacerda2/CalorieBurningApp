@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../../../Styles/FormularyStyle.css";
 
 interface Props {
   onUpdateFilter: (filter: GETEntriesFilter) => void;
@@ -6,7 +7,7 @@ interface Props {
 
 const GetEntriesFilterFields: React.FC<Props> = ({ onUpdateFilter }) => {
   const [filter, setFilter] = useState<GETEntriesFilter>({
-    limit: 20,
+    limit: 10,
     offset: 0,
   });
 
@@ -43,33 +44,36 @@ const GetEntriesFilterFields: React.FC<Props> = ({ onUpdateFilter }) => {
       <label>
         Date Min:
         <input
+          className="input-text"
           type="datetime-local"
           value={filter.datetimeMin?.toISOString().slice(0, -8) ?? ""}
           onChange={(e) => handleDateChange(e, "datetimeMin")}
         />
       </label>
-      <br />
       <label>
         Date Max:
         <input
+          className="input-text"
           type="datetime-local"
           value={filter.datetimeMax?.toISOString().slice(0, -8) ?? ""}
           onChange={(e) => handleDateChange(e, "datetimeMax")}
         />
       </label>
       <br />
+      <p></p>
       <label>
         Title:
         <input
+          className="input-text"
           type="text"
           value={filter.title ?? ""}
           onChange={(e) => setFilter({ ...filter, title: e.target.value })}
         />
       </label>
-      <br />
       <label>
         Burned Calories Min:
         <input
+          className="input-text"
           type="number"
           min="0"
           max="2000"
@@ -77,10 +81,10 @@ const GetEntriesFilterFields: React.FC<Props> = ({ onUpdateFilter }) => {
           onChange={(e) => handleNumericChange(e, "burnedCaloriesMin")}
         />
       </label>
-      <br />
       <label>
         Burned Calories Max:
         <input
+          className="input-text"
           type="number"
           min="0"
           max="2000"

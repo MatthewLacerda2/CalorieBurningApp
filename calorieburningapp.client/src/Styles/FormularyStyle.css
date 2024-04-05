@@ -1,6 +1,7 @@
 .input-text {
   background-color: var(--background-color);
-  height: 21px;
+  height: 18px;
+  min-width: 100px;
   color: black;
   border: 1px solid #ccc;
   border-radius: 5px;

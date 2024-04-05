@@ -77,7 +77,7 @@ public class StreakController : ControllerBase
         }
         StreaksQuery = StreaksQuery.Take(limit);
 
-        StreaksQuery.OrderBy(e => e.count);
+        StreaksQuery.OrderByDescending(e => e.count).ThenByDescending(e => e.record);
 
         var resultQuery = await StreaksQuery.ToArrayAsync();
         var resultsArray = resultQuery.ToArray();

@@ -40,6 +40,7 @@ public class EntriesController : ControllerBase
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseEntry[]>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet]
     public async Task<IActionResult> ReadEntries(DateTime? datetimeMin, DateTime? datetimeMax,
                                                 string? userId, string? title, int? burnedCaloriesMin, int? burnedCaloriesMax,
@@ -125,7 +126,7 @@ public class EntriesController : ControllerBase
                     EntriesQuery = EntriesQuery.OrderBy(c => c.exercise).ThenBy(c => c.dateTime);
                     break;
                 case "datetime":
-                    EntriesQuery = EntriesQuery.OrderBy(c => c.dateTime).ThenBy(c => c.dateTime);
+                    EntriesQuery = EntriesQuery.OrderBy(c => c.dateTime);
                     break;
                 case "title":
                     EntriesQuery = EntriesQuery.OrderBy(c => c.title).ThenBy(c => c.dateTime);
