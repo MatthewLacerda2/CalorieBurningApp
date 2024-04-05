@@ -39,7 +39,7 @@ const Header: React.FC = () => {
   return (
     <div className="main-header">
       <div className="logo">FURNACE</div>
-      {user && (
+      {user && user?.Id !== "" && (
         <div className="user-info">
           <span>
             <b>{user.UserName}</b>

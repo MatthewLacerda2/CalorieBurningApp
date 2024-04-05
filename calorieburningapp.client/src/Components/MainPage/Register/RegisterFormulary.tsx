@@ -1,50 +1,66 @@
 import React, { useState } from "react";
 import Card from "../../Card/Card";
 import "../../../Styles/FormularyStyle.css";
-import { UserDTO } from "../../../Data/UserDTO";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { UserRegister } from "../../../Data/UserRegister";
 
 interface RegisterProps {
   toggleForm: () => void;
 }
 
 const RegisterFormulary: React.FC<RegisterProps> = ({ toggleForm }) => {
-  const [userInfo, setUserInfo] = useState<UserDTO>({
-    fullName: "",
+  const [userInfo, setUserInfo] = useState<UserRegister>({
+    Id: "",
+    FullName: "",
     birthday: new Date(),
-    createdDate: new Date(),
-    lastLogin: new Date(),
-    burnedCalories: 0,
-    userName: "",
-    id: "",
-    email: "",
-    phoneNumber: "",
+    UserName: "",
+    Email: "",
+    PhoneNumber: "",
+    currentPassword: "",
+    newPassword: "",
   });
-  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string>();
   const navigate = useNavigate();
 
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = new Date(e.target.value);
+    setUserInfo({ ...userInfo, birthday: selectedDate });
+  };
+
   const handleRegister = async () => {
+    if (userInfo.currentPassword !== userInfo.newPassword) {
+      setError("Password confirmation failed");
+      return;
+    }
+
     try {
-      console.log(userInfo);
+      const formattedUserInfo = {
+        ...userInfo,
+        birthday: userInfo.birthday.toISOString().split("T")[0],
+      };
+
+      console.log(formattedUserInfo);
+
       const response = await axios.post(
-        `http://localhost:5071/api/v1/users?password=${password}`,
-        userInfo,
+        `http://localhost:5071/api/v1/users?password=${userInfo.currentPassword}`,
+        formattedUserInfo,
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
+
       console.log("Register response:", response.data);
 
       if (response.status === 200) {
         await handleLogin();
       }
     } catch (error: any) {
-      console.error("XXXError registering user:", error);
-      console.error("XXXError registering user:", error.response);
-      console.error("XXXError registering user:", error.response.data);
+      console.error("Error registering user:", error);
+      console.error("Error response:", error.response);
+      setError("Error registering user. Please try again.");
     }
   };
 
@@ -53,8 +69,8 @@ const RegisterFormulary: React.FC<RegisterProps> = ({ toggleForm }) => {
       const response = await axios.post(
         "http://localhost:5071/api/v1/login",
         {
-          userName: userInfo.userName,
-          password: password,
+          userName: userInfo.UserName,
+          password: userInfo.currentPassword,
         },
         {
           headers: {
@@ -83,9 +99,9 @@ const RegisterFormulary: React.FC<RegisterProps> = ({ toggleForm }) => {
           style={{ width: "20em" }}
           type="text"
           placeholder="Full Name"
-          value={userInfo.fullName}
+          value={userInfo.FullName}
           onChange={(e) =>
-            setUserInfo({ ...userInfo, fullName: e.target.value })
+            setUserInfo({ ...userInfo, FullName: e.target.value })
           }
         />
         <input
@@ -93,9 +109,9 @@ const RegisterFormulary: React.FC<RegisterProps> = ({ toggleForm }) => {
           style={{ width: "20em" }}
           type="text"
           placeholder="Username"
-          value={userInfo.userName}
+          value={userInfo.UserName}
           onChange={(e) =>
-            setUserInfo({ ...userInfo, userName: e.target.value })
+            setUserInfo({ ...userInfo, UserName: e.target.value })
           }
         />
         <input
@@ -103,17 +119,34 @@ const RegisterFormulary: React.FC<RegisterProps> = ({ toggleForm }) => {
           style={{ width: "20em" }}
           type="email"
           placeholder="Email"
-          value={userInfo.email}
-          onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
+          value={userInfo.Email}
+          onChange={(e) => setUserInfo({ ...userInfo, Email: e.target.value })}
         />
         <input
           className="input-text"
           style={{ width: "20em" }}
           type="text"
           placeholder="Phone Number"
-          value={userInfo.phoneNumber}
+          value={userInfo.PhoneNumber}
           onChange={(e) =>
-            setUserInfo({ ...userInfo, phoneNumber: e.target.value })
+            setUserInfo({ ...userInfo, PhoneNumber: e.target.value })
+          }
+        />
+        <input
+          className="input-text"
+          style={{ width: "20em" }}
+          type="date"
+          value={userInfo.birthday.getDate()}
+          onChange={handleDateChange}
+        />
+        <input
+          className="input-text"
+          style={{ width: "20em" }}
+          type="password"
+          placeholder="Password"
+          value={userInfo.currentPassword}
+          onChange={(e) =>
+            setUserInfo({ ...userInfo, currentPassword: e.target.value })
           }
         />
         <input
@@ -121,20 +154,29 @@ const RegisterFormulary: React.FC<RegisterProps> = ({ toggleForm }) => {
           style={{ width: "20em" }}
           type="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={userInfo.newPassword}
+          onChange={(e) =>
+            setUserInfo({ ...userInfo, newPassword: e.target.value })
+          }
         />
         <p></p>
+        {error && error}
         <button
           className="send-button"
           style={{ width: "105px", fontSize: "20px" }}
           onClick={handleRegister}>
           Register
         </button>
-        <p></p>
+        <p style={{ marginTop: "20px", marginBottom: "-3px" }}>
+          Already have an account?
+        </p>
         <button
-          className="send-button"
-          style={{ width: "85px", backgroundColor: "blue" }}
+          style={{
+            color: "blue",
+            width: "100px",
+            fontSize: "18px",
+            backgroundColor: "transparent",
+          }}
           onClick={toggleForm}>
           Login
         </button>
