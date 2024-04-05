@@ -53,12 +53,12 @@ public class UserController : ControllerBase
 
         if (!string.IsNullOrEmpty(username))
         {
-            UsersQuery = UsersQuery.Where(user => user.UserName!.Contains(username)); //Is this case sensitive???
+            UsersQuery = UsersQuery.Where(user => user.UserName!.Contains(username, StringComparison.OrdinalIgnoreCase));
         }
 
         if (!string.IsNullOrEmpty(fullname))
         {
-            UsersQuery = UsersQuery.Where(user => user.UserName!.Contains(fullname)); //Is this case sensitive???
+            UsersQuery = UsersQuery.Where(user => user.UserName!.Contains(fullname, StringComparison.OrdinalIgnoreCase));
         }
 
         if (!string.IsNullOrEmpty(sort))

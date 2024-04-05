@@ -76,7 +76,7 @@ public class EntriesController : ControllerBase
 
         if (!string.IsNullOrEmpty(title))
         {
-            EntriesQuery = EntriesQuery.Where(e => e.title.Contains(title));
+            EntriesQuery = EntriesQuery.Where(e => e.title.Contains(title, StringComparison.OrdinalIgnoreCase));
         }
 
         if (burnedCaloriesMin.HasValue)
