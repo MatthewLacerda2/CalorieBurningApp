@@ -21,23 +21,10 @@ const UserPage: React.FC = () => {
   const streakInfo: string = `Current Streak: ${currStreak} | Record Streak: ${recordStreak}`;
   const totalCals: string = `Total calories Burnt: ${user.burnedCalories}`;
 
-  const filter: GETEntriesFilter = {
-    datetimeMin: undefined,
-    datetimeMax: undefined,
-    userId: user!.Id,
-    title: undefined,
-    burnedCaloriesMin: undefined,
-    burnedCaloriesMax: undefined,
-    offset: 0,
-    limit: 10,
-    sort: "datetimeDesc",
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         let url = `http://localhost:5071/api/v1/streaks/${user?.Id}`;
-        console.log(`http://localhost:5071/api/v1/streaks/${user?.Id}`);
 
         const response = await axios.get(url);
 
@@ -56,22 +43,9 @@ const UserPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let url = "http://localhost:5071/api/v1/entries/";
+        let url = `http://localhost:5071/api/v1/entries?userId=${user.Id}&limit=10`;
 
-        filter.userId = user?.Id;
-
-        let queryString = Object.keys(filter)
-          .map((key) =>
-            filter[key as keyof GETEntriesFilter] !== undefined
-              ? `${key}=${filter[key as keyof GETEntriesFilter]}`
-              : ""
-          )
-          .filter(Boolean)
-          .join("&");
-
-        if (queryString) {
-          url += `?${queryString}`;
-        }
+        console.log("URL FILTER ID: " + url);
 
         const response = await axios.get(url);
 

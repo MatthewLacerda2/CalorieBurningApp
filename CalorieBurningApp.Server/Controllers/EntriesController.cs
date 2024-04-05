@@ -40,6 +40,7 @@ public class EntriesController : ControllerBase
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExerciseEntry[]>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet]
     public async Task<IActionResult> ReadEntries(DateTime? datetimeMin, DateTime? datetimeMax,
                                                 string? userId, string? title, int? burnedCaloriesMin, int? burnedCaloriesMax,
