@@ -4,6 +4,7 @@ import { ExerciseEntry } from "../../Data/ExerciseEntry";
 import EExercise from "../../Data/EExercise";
 import Card from "../Card/Card";
 import { getUserFromToken } from "../../Utils/getUserFromToken";
+import "../../Styles/FormularyStyle.css";
 
 interface ExerciseFormProps {
   exerciseEntry?: ExerciseEntry;
@@ -14,7 +15,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
     userId: "",
     Id: "",
     exercise: EExercise.walking,
-    dateTime: new Date(),
+    dateTime: new Date(2020, 1, 1, 13, 0, 0, 0),
     title: "",
     burnedCalories: 0,
   });
@@ -91,6 +92,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
         <label>
           Date & Time:
           <input
+            className="input-text"
             name="dateTime"
             type="datetime-local"
             value={exerciseData.dateTime?.toISOString().slice(0, -16) ?? ""}
@@ -101,6 +103,7 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
         <label>
           Title:
           <input
+            className="input-text"
             name="title"
             type="text"
             value={exerciseData.title}
@@ -111,6 +114,8 @@ const ExerciseFormulary: React.FC<ExerciseFormProps> = ({ exerciseEntry }) => {
         <label>
           Burned Calories:
           <input
+            className="input-text"
+            style={{ height: "15px" }}
             name="burnedCalories"
             type="number"
             value={exerciseData.burnedCalories}
