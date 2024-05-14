@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using CalorieBurningApp.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +12,6 @@ namespace CalorieBurningApp.Server.Controllers;
 [AllowAnonymous]
 [ApiController]
 [Route("api/v1/entries")]
-[Produces("application/json")]
 public class EntriesController : ControllerBase
 {
 
@@ -180,7 +180,6 @@ public class EntriesController : ControllerBase
         _context.ExerciseEntries.Add(newEntry);
         await _context.SaveChangesAsync();
 
-        // Perform the streak check after saving the entry
         await CheckAndUpdateStreak(newEntry);
 
         var response = JsonConvert.SerializeObject(newEntry);
@@ -191,13 +190,11 @@ public class EntriesController : ControllerBase
     private async Task CheckAndUpdateStreak(ExerciseEntry newEntry)
     {
 
-        // Retrieve the last entry asynchronously
         var lastEntry = await _context.ExerciseEntries
             .Where(e => e.userId == newEntry.userId)
             .OrderByDescending(e => e.dateTime)
             .FirstOrDefaultAsync();
 
-        // If there is no last entry or it was not posted yesterday, return
         var postedYesterday = lastEntry!.dateTime.Date == DateTime.Now.AddDays(-1).Date;
         var postedToday = lastEntry.dateTime.Date != DateTime.Now.Date;
         Console.WriteLine("postedToday: " + postedToday + ", postedYesterday:" + postedYesterday);
@@ -206,7 +203,6 @@ public class EntriesController : ControllerBase
             return;
         }
 
-        // Otherwise, update the streak
         var streak = await _context.Streaks.FirstOrDefaultAsync(s => s.UserId == newEntry.userId);
         if (streak != null)
         {
@@ -237,17 +233,14 @@ public class EntriesController : ControllerBase
             return BadRequest("Calories must be a natural number greater than 0");
         }
 
-        // Update the properties of the existing entry
         entryExists.userId = upEntry.userId;
         entryExists.exercise = upEntry.exercise;
         entryExists.dateTime = upEntry.dateTime;
         entryExists.title = upEntry.title;
         entryExists.burnedCalories = upEntry.burnedCalories;
 
-        // Calculate the calorie difference
         int calorieUpdate = upEntry.burnedCalories - entryExists.burnedCalories;
 
-        // Find the user related to this entry and update the burned calories
         var user = await _context.Users.FindAsync(entryExists.userId);
         if (user != null)
         {

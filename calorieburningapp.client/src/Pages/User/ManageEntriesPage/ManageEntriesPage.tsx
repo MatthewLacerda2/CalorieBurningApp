@@ -26,6 +26,8 @@ const ManageEntriesPage: React.FC = () => {
         limit: 20,
         sort: "datetimeDesc",
       };
+      console.log("aqui meu irmao, \n" + user + "\naora meu preto");
+      console.log("aqui meu irmao2, \n" + user.Id + "\naora meu preto2");
 
       setFilter(newFilter);
     } else {
